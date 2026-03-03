@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
+<link rel="stylesheet" href="offre_de_stage.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-..."/>
 <head>
   <meta charset="UTF-8">
   <title>Recherche d’offres</title>
@@ -53,58 +55,64 @@
   <main>
 
     <!-- Section recherche -->
-    <section>
-      <h1>Rechercher une offre</h1>
+    <section class="search-section" aria-label="Rechercher une offre">
+    <h1>Rechercher une offre</h1>
 
-      <form action="#" method="get">
+    <form id="search-bar" action="#" method="get" class="search-form" autocomplete="off">
 
-        <label>
-          Entreprise, profil ou compétence
-          <input type="search" name="query" placeholder="Entreprise, profil, compétence">
+      <div class="field">
+        <label for="company-search" class="field-label">
+          <i class="fas fa-building" aria-hidden="true"></i>
+          <span class="sr-only">Entreprise, profil</span>
         </label>
+        <input id="company-search" class="field-input" type="search" name="query" placeholder="Entreprise, profil, compétence...">
+      </div>
 
-        <label>
-          Ville
-          <input type="text" name="ville" placeholder="Ville">
+      <div class="field">
+        <label for="city-search" class="field-label">
+          <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+          <span class="sr-only">Ville</span>
         </label>
+        <input id="city-search" class="field-input" type="text" name="ville" placeholder="Ville">
+      </div>
 
-        <label>
-          Domaine
-          <select name="domaine">
-            <option value="">Tous les domaines</option>
-            <option value="informatique">Informatique</option>
-            <option value="marketing">Marketing</option>
-            <option value="industrie">Industrie</option>
-          </select>
+      <div class="field">
+        <label for="domain-search" class="field-label">
+          <i class="fas fa-briefcase" aria-hidden="true"></i>
+          <span class="sr-only">Domaine</span>
         </label>
+        <select id="domain-search" name="domaine" class="field-input">
+          <option value="">Tous les domaines</option>
+          <option value="informatique">Informatique</option>
+          <option value="marketing">Marketing</option>
+          <option value="industrie">Industrie</option>
+        </select>
+      </div>
 
-        <button type="submit">Rechercher</button>
-      </form>
-    </section>
+      <button id="filter" type="submit" class="search-button">Rechercher</button>
+    </form>
+  </section>
 
     <!-- Résultat / Carte d’offre -->
-    <section>
-      <h2>Offres disponibles</h2>
+    <section class="offer">
 
       <article>
-        <img src="entreprise.png" alt="Logo de l’entreprise">
+        <h2>Développeur Web</h2>
+        <h3>Cesi École d'Ingénieurs</h3>
 
-        <h3>Nom de l’entreprise</h3>
+        <p><strong>Ville :</strong> Saint-Nazaire</p>
+        <p><strong>Durée :</strong> 3 mois</p>
+        <p><strong>Domaine :</strong> Développement Web</p>
 
-        <p><strong>Type de contrat :</strong> Stage</p>
-        <p><strong>Ville :</strong> Cotonou</p>
         <p>
-          <strong>Durée :</strong>
-          <time datetime="P6M">6 mois</time>
+          Le CESI École d'Ingénieurs recherche un stagiaire en développement web
+          motivé pour rejoindre son équipe digitale...
         </p>
 
-        <ul>
-          <li>Compétence clé</li>
-          <li>Compétence clé</li>
-          <li>Compétence clé</li>
-        </ul>
+        <p class="date">Publié il y a 2 jours</p>
 
-        <a href="#">Voir l’offre</a>
+        <label for="details">Voir les détails :</label>
+        <input type="button" id="details" name="details" value="Détails">
       </article>
 
     </section>
