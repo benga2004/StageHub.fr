@@ -3,57 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Page de candidature</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/candidature.css">
 </head>
+
 <body>
 
-    <!-- ================= NAVBAR (ZONE RESERVEE) ================= -->
+    
     <div id="navbar">
-        <!-- Navbar à modifier plus tard -->
+        
         <hr>
     </div>
 
-    <h2>Formulaire de candidature</h2>
+    <div class="container">
 
-    <form>
+        <h2>Formulaire de candidature</h2>
 
-        <!-- ================= BLOC 1 : INFOS ENTREPRISE ================= -->
-        <fieldset>
-            <legend>Informations de l'entreprise</legend>
+        <form>
 
-            <!-- Bloc vide réservé aux données récupérées ultérieurement -->
-            <div id="entreprise">
-                <!-- Les informations de l'entreprise seront affichées ici -->
-            </div>
+            
+            <fieldset>
+                <legend>Informations de l'entreprise</legend>
 
-        </fieldset>
+                <div id="entreprise">
+                    
+                </div>
+            </fieldset>
 
-        <br>
+            
+            <fieldset>
+                <legend>Importer votre CV</legend>
 
-        <!-- ================= BLOC 2 : IMPORT CV ================= -->
-        <fieldset>
-            <legend>Importer votre CV</legend>
+                <label for="cv">Sélectionner un fichier :</label>
+                <input type="file" id="cv" name="cv" required>
+            </fieldset>
 
-            <label for="cv">Sélectionner un fichier :</label><br><br>
-            <input type="file" id="cv" name="cv">
+            
+            <fieldset>
+                <legend>Lettre de motivation</legend>
 
-        </fieldset>
+                <label for="motivation">Votre message :</label>
+                <textarea id="motivation" name="motivation" required></textarea>
+            </fieldset>
 
-        <br>
+           
+            <button type="submit">Envoyer</button>
 
-        
-            <legend>Lettre de motivation</legend>
+        </form>
 
-            <label for="motivation">Votre message :</label><br><br>
-            <textarea id="motivation" name="motivation" rows="10" cols="50"></textarea>
-
-        </fieldset>
-
-        <br>
-
-        <!-- ================= BOUTON ENVOYER ================= -->
-        <button type="submit">Envoyer</button>
-
-    </form>
+    </div>
 
 </body>
 </html>
