@@ -1,6 +1,4 @@
-<?php include '../../controllers/OfferController.php'; ?>
-
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -97,26 +95,30 @@
 <?php endforeach; ?>
 
 </main>
-
-</div>
 <!-- Pagination -->
 <div class="pagination">
     <?php if ($page > 1): ?>
         <a href="?page=<?= $page - 1 ?>">&#8249; Précédent</a>
     <?php endif; ?>
 
-    <?php for ($i = 1; $i <= $pages; $i++): ?>
+    <?php /* for ($i = 1; $i <= $pages; $i++): ?>
         <?php if ($i === $page): ?>
             <strong><?= $i ?></strong>
         <?php else: ?>
             <a href="?page=<?= $i ?>"><?= $i ?></a>
         <?php endif; ?>
-    <?php endfor; ?>
+    <?php endfor; */ ?>
+    <?= $page ?>/<?= $pages?> 
+
+    
 
     <?php if ($page < $pages): ?>
         <a href="?page=<?= $page + 1 ?>">Suivant &#8250;</a>
     <?php endif; ?>
 </div>
+
+</div>
+
 
 </body>
 

@@ -45,14 +45,14 @@ margin-bottom:10px;
 
 h1 {
     font-size: 28px;
-    padding: 20px;
+    padding: 10px;
     margin: 0;
     color: #2d3748;
 }
 
 #search-bar {
     background: white;
-    margin: 15x;
+    margin: 0x;
     padding: 20px 20px;
     border: 1px solid #becfdd;
     border-radius: 4px;
