@@ -1,6 +1,6 @@
 <?php
 
-$offres = [
+/*$offres = [
     0 => [
         'titre'       => 'Développeur Web',
         'entreprise'  => 'Cesi École d\'Ingénieurs',
@@ -80,7 +80,7 @@ if (!isset($offres[$id])) {
     $offre = null;
 } else {
     $offre = $offres[$id];
-}
+}*/
 
 ?>
 <!DOCTYPE html>
