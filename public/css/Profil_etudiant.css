@@ -182,6 +182,24 @@ main.content {
     border-top: none;
 }
 
+.info-row .card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+}
+
+.info-row .card:first-of-type {
+    border-top: none;
+}
+
+.info-row .card > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .label {
     font-weight: 600;
     color: #667eea;
