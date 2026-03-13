@@ -191,7 +191,7 @@ i {
   border-radius: 26px;
   background: #eaf1fb;
   color: #2a4a8a;
-  font-weight: 600;
+  font-weight: 602;
   cursor: pointer;
   transition: transform .05s ease-in-out, background .2s;
 }
@@ -203,3 +203,4 @@ i {
   outline: 2px solid #6d8bd5;
   outline-offset: 2px;
 }
+/* Il n'y a rien ici */
