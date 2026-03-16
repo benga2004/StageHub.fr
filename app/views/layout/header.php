@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="../../../public/css/style.css">
 <link rel="stylesheet" href="../../../public/css/inscription.css">
 <link rel="stylesheet" href="../../../public/css/offres.css">
+<link rel="stylesheet" href="../../../public/css/profil.css">
 
 </head>
 
