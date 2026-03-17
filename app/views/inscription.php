@@ -42,7 +42,7 @@
 
     <div class="login-section">
         <p>Vous avez déjà un compte?</p>
-        <a href="connexionCtr.php">Connectez-vous</a>
+        <a href="connexion.php">Connectez-vous</a>
     </div>
 </form>
 
