@@ -1,39 +1,26 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - StageHub</title>
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
-<body>
+<?php
 
-    <div class="phone-frame">
+$title      = "Dashboard Admin - StageHub";
+$extra_css  = '<link rel="stylesheet" href="../css/admin.css">';
 
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <span>9:41</span>
-            <span>StageHub</span>
-            <span>100% ▋</span>
+$custom_header = '
+<header class="header">
+    <div class="header-logo">
+        <div class="header-logo-icon">S</div>
+        StageHub
+    </div>
+    <div class="header-right">
+        <div class="header-user">
+            <div>Admin</div>
+            <span class="role-badge">Administrateur</span>
         </div>
+        <button class="btn-logout">&#x23FB;</button>
+    </div>
+</header>';
 
-        <!-- Header -->
-        <header class="header">
-            <div class="header-logo">
-                <div class="header-logo-icon">S</div>
-                StageHub
-            </div>
-            <div class="header-right">
-                <div class="header-user">
-                    <div>Admin</div>
-                    <span class="role-badge">Administrateur</span>
-                </div>
-                <button class="btn-logout">&#x23FB;</button>
-            </div>
-        </header>
+require_once '../../app/views/layout/header.php';
 
-        <!-- Contenu principal -->
-        <main class="content">
+?>
 
             <!-- Bannière de bienvenue -->
             <div class="welcome-banner">
@@ -131,12 +118,4 @@
 
             </div>
 
-        </main>
-
-        <!-- Footer -->
-        <div class="footer">StageHub Admin &mdash; 2025</div>
-
-    </div>
-
-</body>
-</html>
+<?php require_once '../../app/views/layout/footer.php'; ?>

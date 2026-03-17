@@ -1,69 +1,30 @@
 /* ============================================
-   RESET & BASE STYLES
+   ADMIN - OVERRIDES
+   Complète style.css pour les pages admin.
+   Même principe qu'inscription.css :
+   on n'écrit ici que ce qui est spécifique
+   au dashboard admin.
    ============================================ */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    min-height: 100vh;
-}
-
-/* ============================================
-   PHONE FRAME
-   ============================================ */
-
+/* Fond légèrement grisé pour la phone-frame admin */
 .phone-frame {
-    width: 100%;
     background: #f5f7fa;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
-/* ============================================
-   STATUS BAR
-   ============================================ */
-
-.status-bar {
-    background: #000;
-    color: white;
-    padding: 8px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    font-weight: 600;
-    flex-shrink: 0;
-}
-
-/* ============================================
-   HEADER
-   ============================================ */
-
+/* Header admin : padding resserré + ne rétrécit pas */
 header.header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
     padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex-shrink: 0;
 }
+
+/* Status bar : ne rétrécit pas */
+.status-bar {
+    flex-shrink: 0;
+}
+
+/* ============================================
+   HEADER - ÉLÉMENTS ADMIN
+   ============================================ */
 
 .header-logo {
     display: flex;
@@ -123,18 +84,16 @@ header.header {
 }
 
 /* ============================================
-   MAIN CONTENT
+   CONTENU PRINCIPAL - OVERRIDE
    ============================================ */
 
 main.content {
-    flex: 1;
     padding: 16px;
-    overflow-y: auto;
     background: #f5f7fa;
 }
 
 /* ============================================
-   WELCOME BANNER
+   BANNIÈRE DE BIENVENUE
    ============================================ */
 
 .welcome-banner {
@@ -157,7 +116,7 @@ main.content {
 }
 
 /* ============================================
-   STATS SECTION
+   STATISTIQUES
    ============================================ */
 
 .stats-grid {
@@ -202,7 +161,7 @@ main.content {
 }
 
 /* ============================================
-   MODULES SECTION
+   MODULES
    ============================================ */
 
 .section-title {
@@ -292,46 +251,13 @@ main.content {
 }
 
 /* ============================================
-   FOOTER
+   FOOTER - OVERRIDE
    ============================================ */
 
 .footer {
     background: white;
-    text-align: center;
-    padding: 10px;
     font-size: 11px;
     color: #a0aec0;
     border-top: 1px solid #e2e8f0;
     flex-shrink: 0;
-}
-
-/* ============================================
-   MEDIA QUERIES - TABLET (min-width: 768px)
-   ============================================ */
-
-@media (min-width: 768px) {
-    body {
-        justify-content: center;
-        align-items: center;
-    }
-
-    .phone-frame {
-        width: 375px;
-        border-radius: 40px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        border: 8px solid #000;
-        height: auto;
-        max-height: 90vh;
-    }
-}
-
-/* ============================================
-   MEDIA QUERIES - DESKTOP (min-width: 1024px)
-   ============================================ */
-
-@media (min-width: 1024px) {
-    .phone-frame {
-        border-radius: 45px;
-        border: 10px solid #000;
-    }
 }

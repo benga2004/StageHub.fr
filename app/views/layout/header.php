@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="../../../public/css/inscription.css">
 <link rel="stylesheet" href="../../../public/css/offres.css">
 <link rel="stylesheet" href="../../../public/css/profil.css">
+<?php if (!empty($extra_css)) echo $extra_css; ?>
 
 </head>
 
@@ -27,6 +28,9 @@
     <div class="status-bar-right">A B</div>
 </div>
 
+<?php if (!empty($custom_header)): ?>
+<?= $custom_header ?>
+<?php else: ?>
 <header class="header">
     <div class="logo">
         <div class="logo-icon">Logo</div>
@@ -34,5 +38,6 @@
     </div>
     <button class="menu-icon" aria-label="Menu">☰</button>
 </header>
+<?php endif; ?>
 
 <main class="content">
