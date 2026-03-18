@@ -1,0 +1,108 @@
+/* Éditeur de description */
+.editor-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    background: #f9f9f9;
+}
+
+.editor-toolbar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.editor-toolbar button:hover {
+    background: #e0e0e0;
+}
+
+.editor-content {
+    min-height: 150px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 6px 6px;
+    padding: 10px;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+/* Tags avantages */
+.avantages-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.avantage-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.avantage-tag input[type="checkbox"] {
+    display: none;
+}
+
+.avantage-tag:has(input:checked) {
+    border-color: #000;
+    background: #fff;
+    font-weight: 500;
+}
+
+.avantage-tag:has(input:checked) span::before {
+    content: "✓ ";
+}
+
+.avantage-tag:not(:has(input:checked)) span::before {
+    content: "+ ";
+}
+
+
+.avantage-custom-add {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.avantage-custom-add input {
+    flex: 1;
+    padding: 6px 12px;
+    border: 1px dashed #aaa;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.avantage-custom-add button {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.remove-tag {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #888;
+    padding: 0 0 0 6px;
+}
+
+.remove-tag:hover {
+    color: #f00;
+}

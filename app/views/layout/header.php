@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="../../../public/css/inscription.css">
 <link rel="stylesheet" href="../../../public/css/offres.css">
 <link rel="stylesheet" href="../../../public/css/profil.css">
+<link rel="stylesheet" href="../../../public/css/ajout_offres.css">
 <?php if (!empty($extra_css)) echo $extra_css; ?>
 
 </head>
