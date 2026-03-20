@@ -1,6 +1,6 @@
 <?php
-require_once 'controllers/AddOfferController.php';
-require_once 'models/Offer.php';
+require_once '../app/controllers/AddOfferController.php';
+require_once '../app/models/Offer.php';
 
 $action = $_GET['action'] ?? 'home';
 $controller = new AddOfferController();

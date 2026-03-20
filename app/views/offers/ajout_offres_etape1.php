@@ -1,5 +1,5 @@
 <?php $title = "Ajouter une offre - StageHub"; ?>
-<?php include 'layout/header.php'; ?>
+<?php include '../layout/header.php'; ?>
 
 <h1>Informations de base</h1>
 
@@ -57,4 +57,4 @@
 
 </form>
 
-<?php include 'layout/footer.php'; ?>
+<?php include '../layout/footer.php'; ?>
