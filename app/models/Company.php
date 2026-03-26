@@ -16,6 +16,18 @@ class Company {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function search(string $query): array {
+        $stmt = $this->db->prepare('SELECT * FROM entreprises WHERE nom LIKE :query');
+        $stmt->execute([':query' => '%' . $query . '%']);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getByName(string $name): ?array {
+        $stmt = $this->db->prepare('SELECT * FROM entreprises WHERE nom = :nom');
+        $stmt->execute([':nom' => $name]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
     public function create(array $data): bool {
         $stmt = $this->db->prepare('
             INSERT INTO entreprises (nom, description, email, telephone)

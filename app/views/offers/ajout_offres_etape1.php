@@ -3,7 +3,7 @@
 
 <h1>Informations de base</h1>
 
-<form action="#" method="POST">
+<form action="offres/ajouter/etape2" method="POST">
 
     <fieldset>
         <legend>Informations du poste</legend>
@@ -14,13 +14,14 @@
         </div>
 
         <div class="form-group">
-            <label for="mobilite">Mobilité du poste *</label>
-            <select id="mobilite" name="mobilite" required>
+            <label for="domaine">Domaine *</label>
+            <select id="domaine" name="domaine" required>
                 <option value="">-- Choisir --</option>
-                <option value="inPerson">En présentiel</option>
-                <option value="fullTelework">Télétravail complet</option>
-                <option value="hybridTelework">Travail hybride</option>
-                <option value="oftenMoving">Déplacements fréquents</option>
+                <option value="informatique">Informatique</option>
+                <option value="marketing">Marketing</option>
+                <option value="industrie">Industrie</option>
+                <option value="design">Design</option>
+                <option value="finance">Finance</option>
             </select>
         </div>
 
@@ -38,16 +39,16 @@
             <label for="delai">Délai de recrutement *</label>
             <select id="delai" name="delai" required>
                 <option value="">-- Choisir --</option>
-                <option value="delai1">1 à 3 jours</option>
-                <option value="delai2">3 à 7 jours</option>
-                <option value="delai3">1 à 2 semaines</option>
-                <option value="delai4">2 à 4 semaines</option>
-                <option value="delai5">Plus de 4 semaines</option>
+                <option value="3">1 à 3 jours</option>
+                <option value="7">3 à 7 jours</option>
+                <option value="14">1 à 2 semaines</option>
+                <option value="28">2 à 4 semaines</option>
+                <option value="30">Plus de 4 semaines</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="numberOfJob">Nombre de personnes à recruter (30 prochains jours) *</label>
+            <label for="numberOfJob">Nombre de stagiaires souhaités *</label>
             <input type="number" id="numberOfJob" name="numberOfJob" value="1" min="1" required>
         </div>
 

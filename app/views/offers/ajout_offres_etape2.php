@@ -53,11 +53,6 @@
         </div>
 
         <div class="form-group">
-            <label for="maxSalary">Salaire maximum (€)</label>
-            <input type="number" id="maxSalary" name="maxSalary" min="0">
-        </div>
-
-        <div class="form-group">
             <label for="frequence">Fréquence</label>
             <select id="frequence" name="frequence">
                 <option value="fMonth">Par mois</option>
@@ -78,6 +73,7 @@
             $avantages = [
                 "transport"     => "Prise en charge du transport quotidien",
                 "interessement" => "Intéressement et participation",
+                "cantine"      => "Accès à une cantine ou tickets restaurant",
                 "rtt"           => "RTT",
                 "flextime"      => "Flextime",
                 "vehicule"      => "Véhicule de fonction",

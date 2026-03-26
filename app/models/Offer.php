@@ -28,14 +28,15 @@ class Offer {
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare('
-            INSERT INTO offres (titre, description, entreprise_id, remuneration, date_offre)
-            VALUES (:titre, :description, :entreprise_id, :remuneration, NOW())
+            INSERT INTO offres (titre, description, entreprise_id, remuneration, avantage, date_offre)
+            VALUES (:titre, :description, :entreprise_id, :remuneration, :avantage, NOW())
         ');
         return $stmt->execute([
             ':titre'         => $data['jobTitle'],
             ':description'   => $data['description'],
             ':entreprise_id' => $data['entreprise_id'],
             ':remuneration'  => $data['minSalary'],
+            ':avantage'      => implode(',', $data['avantages'] ?? []),
         ]);
     }
 

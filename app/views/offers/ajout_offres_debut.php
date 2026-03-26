@@ -45,18 +45,18 @@
         </div>
 
         <div class="form-group">
-            <label for="firstname">Prénom *</label>
-            <input type="text" id="firstname" name="firstname">
+            <label for="description">Description de l'entreprise *</label>
+            <input type="text" id="description" name="description">
         </div>
 
         <div class="form-group">
-            <label for="lastname">Nom *</label>
-            <input type="text" id="lastname" name="lastname">
+            <label for="email">Email de l'entreprise *</label>
+            <input type="email" id="email" name="email">
         </div>
 
         <div class="form-group">
-            <label for="phoneNumber">Téléphone *</label>
-            <input type="tel" id="phoneNumber" name="phoneNumber">
+            <label for="telephone">Téléphone *</label>
+            <input type="tel" id="telephone" name="telephone">
         </div>
 
         <button type="submit" class="btn-submit">Continuer</button>

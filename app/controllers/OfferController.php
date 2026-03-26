@@ -76,9 +76,54 @@ class OfferController {
         require BASE_PATH . '/app/views/offers/detail.php';
     }
 
+    public function add(): void {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (empty($_POST['enterpriseStatut'])) {
+                header('Location: ' . BASE_URL . 'offres/ajouter');
+                exit;
+            } else {
+                if ($_POST['enterpriseStatut'] === 'hasAccount') {
+                    $_SESSION['offer_begin1'] = [
+                        'enterpriseNameSearch' => htmlspecialchars($_POST['enterpriseNameSearch'] ?? ''),
+                    ];
+                    $entreprise_id = (new Company())->getByName($_SESSION['offer_begin1']['enterpriseNameSearch']);
+                    if (!$entreprise_id) {
+                        echo "<script>alert('Entreprise non trouvée. Veuillez vérifier le nom ou créer un compte pour votre entreprise.');</script>";
+                        header('Location: ' . BASE_URL . 'offres/ajouter');
+                        exit;
+                    }
+
+                    header('Location: ' . BASE_URL . 'offres/ajouter/etape1');
+                    exit;
+                }
+                if ($_POST['enterpriseStatut'] === 'hasNoAccount') {
+                    $_SESSION['offer_begin2'] = [
+                        'enterpriseName' => htmlspecialchars($_POST['enterpriseName'] ?? ''),
+                        'description' => htmlspecialchars($_POST['description'] ?? ''),
+                        'email' => htmlspecialchars($_POST['email'] ?? ''),
+                        'telephone' => htmlspecialchars($_POST['telephone'] ?? ''),
+                    ];
+                    (new Company())->create([
+                        'nom' => $_SESSION['offer_begin2']['enterpriseName'],
+                        'description' => htmlspecialchars($_POST['description'] ?? ''),
+                        'email' => htmlspecialchars($_POST['email'] ?? ''),
+                        'telephone' => htmlspecialchars($_POST['telephone'] ?? ''),
+                    ]);
+
+                    header('Location: ' . BASE_URL . 'offres/ajouter/etape1');
+                    exit;
+                }
+            }
+            
+        }
+        require BASE_PATH . '/app/views/offers/ajout_offres.php';
+    }
+
     public function addStep1(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['offer_step1'] = [
+                'entreprise_id' => (new Company())->getByName($_SESSION['offer_begin']['enterpriseNameSearch'])['id'] ?? null,
                 'jobTitle'    => htmlspecialchars($_POST['jobTitle']),
                 'mobilite'    => htmlspecialchars($_POST['mobilite']),
                 'location'    => htmlspecialchars($_POST['location']),
