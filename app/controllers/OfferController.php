@@ -36,8 +36,8 @@ class OfferController {
         $domaine = trim($_GET['domaine'] ?? '');
         $offset  = ($page - 1) * $this->parPage;
         $offresPage = $model->search($query, $ville, $domaine, $this->parPage, $offset);
-        $total      = $model->count();
-        $pages      = (int)ceil($total / $this->parPage);
+        $total      = $model->countFiltered($query, $ville, $domaine);
+        $pages      = (int)ceil(max(1, $total) / $this->parPage);
 
         require BASE_PATH . '/app/views/offers/list.php';
         require BASE_PATH . '/app/views/layout/footer.php';
@@ -59,8 +59,8 @@ class OfferController {
         $offset  = ($page - 1) * $this->parPage;
 
         $offresPage = $model->search($query, $ville, $domaine, $this->parPage, $offset);
-        $total      = $model->count();
-        $pages      = (int)ceil($total / $this->parPage);
+        $total      = $model->countFiltered($query, $ville, $domaine);
+        $pages      = (int)ceil(max(1, $total) / $this->parPage);
 
         require BASE_PATH . '/app/views/offers/list.php';
         require BASE_PATH . '/app/views/layout/footer.php';

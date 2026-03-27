@@ -393,3 +393,46 @@
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ============================================
+   RESPONSIVE - TABLET & DESKTOP
+   ============================================ */
+
+@media (min-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .hero {
+        padding: 20px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .chart-wrap {
+        height: 100px;
+    }
+
+    .cand-row,
+    .act {
+        padding: 12px 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .chart-wrap {
+        grid-template-columns: repeat(6, 1fr);
+        height: 120px;
+    }
+}

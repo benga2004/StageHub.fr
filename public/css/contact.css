@@ -28,7 +28,8 @@ body {
    ============================================ */
 
 .phone-frame {
-    width: 375px;
+    width: 100%;
+    max-width: 375px;
     background: white;
     border-radius: 40px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -38,6 +39,7 @@ body {
     flex-direction: column;
     height: auto;
     max-height: 90vh;
+    margin: 0 auto;
 }
 
 /* ============================================
@@ -294,4 +296,74 @@ fieldset {
 .login-section a:hover,
 .signup-section a:hover {
     color: #764ba2;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET & DESKTOP
+   ============================================ */
+
+@media (min-width: 768px) {
+    body {
+        padding: 30px;
+    }
+
+    .phone-frame {
+        max-width: 500px;
+        border-radius: 20px;
+        border: 4px solid #000;
+    }
+
+    header.header {
+        padding: 20px 25px;
+    }
+
+    main.content {
+        padding: 32px 28px;
+    }
+
+    .content h1 {
+        font-size: 28px;
+        margin-bottom: 32px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 16px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .btn-submit {
+        padding: 16px 18px;
+        font-size: 17px;
+        margin: 28px 0 20px 0;
+    }
+
+    .contact-info ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .contact-info ul li {
+        flex: 1 1 45%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .phone-frame {
+        max-width: 600px;
+    }
+
+    .content h1 {
+        font-size: 30px;
+    }
 }

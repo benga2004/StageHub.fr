@@ -32,6 +32,6 @@ class CandidatureController {
             }
         }
 
-        require BASE_PATH . '/app/views/candidature/index.php';
+        require BASE_PATH . '/app/views/offers/candidature.php';
     }
 }

@@ -18,6 +18,18 @@ class Offer {
         return (int) $this->db->query('SELECT COUNT(*) FROM offres')->fetchColumn();
     }
 
+    public function countFiltered(string $query, string $ville, string $domaine): int {
+        $sql = 'SELECT COUNT(*) FROM offres WHERE 1=1';
+        $params = [];
+        if ($query)  { $sql .= ' AND (titre LIKE :q1 OR description LIKE :q2)'; $params[':q1'] = "%$query%"; $params[':q2'] = "%$query%"; }
+        if ($ville)  { $sql .= ' AND ville LIKE :v';  $params[':v']  = "%$ville%"; }
+        if ($domaine){ $sql .= ' AND domaine = :d';   $params[':d']  = $domaine; }
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $k => $v) { $stmt->bindValue($k, $v); }
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
     # @return array|bool
     
     public function getById(int $id): array { 
@@ -28,15 +40,15 @@ class Offer {
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare('
-            INSERT INTO offres (titre, description, entreprise_id, remuneration, avantage, date_offre)
-            VALUES (:titre, :description, :entreprise_id, :remuneration, :avantage, NOW())
+            INSERT INTO offres (titre, description, entreprise_id, remuneration, avantages, date_offre)
+            VALUES (:titre, :description, :entreprise_id, :remuneration, :avantages, NOW())
         ');
         return $stmt->execute([
             ':titre'         => $data['jobTitle'],
             ':description'   => $data['description'],
             ':entreprise_id' => $data['entreprise_id'],
             ':remuneration'  => $data['minSalary'],
-            ':avantage'      => implode(',', $data['avantages'] ?? []),
+            ':avantages'      => implode(',', $data['avantages'] ?? []),
         ]);
     }
 
@@ -55,12 +67,14 @@ class Offer {
     public function search(string $query, string $ville, string $domaine, int $limit, int $offset): array {
         $sql = 'SELECT * FROM offres WHERE 1=1';
         $params = [];
-        if ($query) { $sql .= ' AND (titre LIKE :q OR description LIKE :q)'; $params[':q'] = "%$query%"; }
+        if ($query) { $sql .= ' AND (titre LIKE :q1 OR description LIKE :q2)'; $params[':q1'] = "%$query%"; $params[':q2'] = "%$query%"; }
         if ($ville)  { $sql .= ' AND ville LIKE :v';   $params[':v'] = "%$ville%"; }
         if ($domaine){ $sql .= ' AND domaine = :d';    $params[':d'] = $domaine; }
         $sql .= ' LIMIT :limit OFFSET :offset';
         $stmt = $this->db->prepare($sql);
-        foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+        foreach ($params as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();

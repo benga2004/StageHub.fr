@@ -1,7 +1,7 @@
 <h1>Offres de stage</h1>
 
 <section id="search-bar" aria-label="Rechercher une offre">
-    <form action="" method="get" class="search-form" autocomplete="off">
+    <form action="<?= BASE_URL ?>offres" method="get" class="search-form" autocomplete="off">
         <div class="field">
             <label for="company-search" class="field-label">
                 <i class="fas fa-building" aria-hidden="true"></i>
@@ -42,6 +42,7 @@
 
 </p>
 
+<div class="offer-cards-container">
 <?php foreach ($offresPage as $offre): ?>
 
 <div class="offer-card">
@@ -54,21 +55,22 @@
 <p>Durée : <?= htmlspecialchars($offre['duree']) ?></p>
 <p>Domaine : <?= htmlspecialchars($offre['domaine']) ?></p>
 
-<a href="<?= BASE_URL ?>offres/detail?id=<?= $offre['id'] ?>">Détails</a>
+<a class="details-btn" href="<?= BASE_URL ?>offres/detail?id=<?= $offre['id'] ?>">Détails</a>
 
 </div>
 
 <?php endforeach; ?>
+</div>
 
 <!-- Pagination -->
 <div class="pagination">
     <?php if ($page > 1): ?>
-        <a href="?page=<?= $page - 1 ?>">&#8249; Précédent</a>
+        <a href="?page=<?= $page - 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">&#8249; Précédent</a>
     <?php endif; ?>
     <?= $page ?>/<?= $pages?> 
 
     <?php if ($page < $pages): ?>
-        <a href="?page=<?= $page + 1 ?>">Suivant &#8250;</a>
+        <a href="?page=<?= $page + 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">Suivant &#8250;</a>
     <?php endif; ?>
 
 </div>
