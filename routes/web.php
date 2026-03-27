@@ -56,6 +56,24 @@ switch ($url) {
     case 'admin/entreprises':
         (new AdminController())->entreprises();
         break;
+    case 'offres/ajouter':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['enterpriseStatut'])) {
+                if ($_POST['enterpriseStatut'] === 'hasAccount') {
+                    $_SESSION['offer_begin'] = [
+                        'enterpriseNameSearch' => htmlspecialchars($_POST['enterpriseNameSearch'] ?? ''),
+                    ];
+                    $company = (new Company())->getByName($_SESSION['offer_begin']['enterpriseNameSearch']);
+                    if (!$company) {
+                        $_SESSION['offer_begin2'] = [
+                            'enterpriseName' => htmlspecialchars($_POST['enterpriseNameSearch'] ?? ''),
+                        ];
+                    }
+                }
+            }
+        }
+        require BASE_PATH . '/app/views/offers/ajout_offres_debut.php';
+        break;
     case 'offres/ajouter/etape1':
         (new OfferController())->addStep1();
         break;

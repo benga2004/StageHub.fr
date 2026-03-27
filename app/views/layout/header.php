@@ -16,13 +16,16 @@
 <link rel="stylesheet" href="<?= BASE_URL ?>css/offres.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/profil.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/ajout_offres.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>css/dashboard-pilote.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>css/admin.css">
+
 <?php if (!empty($extra_css)) echo $extra_css; ?>
 
 </head>
 
 <body>
 
-<div>
+<div class="phone-frame">
 
 <div class="status-bar">
     <div class="status-bar-left">3:03</div>

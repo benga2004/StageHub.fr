@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>✅ Candidature envoyée avec succès !</p>
         <p>Merci <strong><?= $succes ?></strong>, votre dossier a bien été reçu.</p>
     </div>
-    <a href="offre_de_stage.php">← Retour aux offres</a>
+    <a href="<?= BASE_URL ?>offres">← Retour aux offres</a>
 
 <?php else: ?>
 

@@ -49,29 +49,3 @@ document.getElementById('customAvantage').addEventListener('keydown', function(e
         addCustomAvantage();
     }
 });
-
-// Menu toggle functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Close menu when clicking a link
-        navMenu.addEventListener('click', function(event) {
-            if (event.target.tagName === 'A') {
-                navMenu.classList.remove('active');
-            }
-        });
-    }
-});

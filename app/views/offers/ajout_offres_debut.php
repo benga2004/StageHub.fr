@@ -1,5 +1,5 @@
-<?php $title = "Ajouter une offre - StageHub"; ?>
-<?php include '../layout/header.php'; ?>
+<?php $title = "Ajouter une offre - StageHub";
+ require __DIR__ . '/../layout/header.php'; ?>
 
 <h1>Nouvelle offre de stage</h1>
 
@@ -65,4 +65,4 @@
 
 </form>
 
-<?php include '../layout/footer.php'; ?>
+<?php require __DIR__ . '/../layout/footer.php'; ?>
