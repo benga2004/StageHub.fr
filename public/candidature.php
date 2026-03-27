@@ -1,51 +1,47 @@
 <?php
 session_start();
 
-$base_url = '/StageHub/public/';
+$succes  = '';
+$erreurs = [];
 
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=stagehub;charset=utf8mb4', 'root', '');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion : " . $e->getMessage());
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-$message = '';
-$success = false;
+    $nom    = isset($_POST['nom'])    ? trim($_POST['nom'])    : '';
+    $prenom = isset($_POST['prenom']) ? trim($_POST['prenom']) : '';
+    $email  = isset($_POST['email'])  ? trim($_POST['email'])  : '';
+    $lettre = isset($_POST['lettre']) ? trim($_POST['lettre']) : '';
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ' . $base_url . 'connexion');
-    exit;
-}
+    if (empty($nom))    $erreurs[] = "Le nom est obligatoire.";
+    if (empty($prenom)) $erreurs[] = "Le prénom est obligatoire.";
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
+        $erreurs[] = "L'adresse email est invalide.";
+    if (empty($lettre)) $erreurs[] = "La lettre de motivation est obligatoire.";
 
-$offre_id = isset($_GET['offre_id']) ? (int)$_GET['offre_id'] : 0;
-
-if ($offre_id <= 0) {
-    $message = "Offre invalide.";
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $offre_id > 0) {
-    $lettre = trim($_POST['lettre'] ?? '');
-    $cv_path = '';
-
-    if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = __DIR__ . '/uploads/cv/';
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
+    if (!isset($_FILES['cv']) || $_FILES['cv']['error'] === UPLOAD_ERR_NO_FILE) {
+        $erreurs[] = "Veuillez déposer votre CV en PDF.";
+    } elseif ($_FILES['cv']['error'] !== UPLOAD_ERR_OK) {
+        $erreurs[] = "Erreur lors du téléversement du fichier.";
+    } elseif ($_FILES['cv']['size'] > 2 * 1024 * 1024) {
+        $erreurs[] = "Le CV ne doit pas dépasser 2 Mo.";
+    } else {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = finfo_file($finfo, $_FILES['cv']['tmp_name']);
+        finfo_close($finfo);
+        if ($mime !== 'application/pdf') {
+            $erreurs[] = "Le fichier doit être un PDF.";
         }
-        $filename = uniqid() . '_' . basename($_FILES['cv']['name']);
-        $cv_path = $upload_dir . $filename;
-        move_uploaded_file($_FILES['cv']['tmp_name'], $cv_path);
-        $cv_path = 'uploads/cv/' . $filename;
     }
 
-    if (empty($lettre)) {
-        $message = "Veuillez remplir la lettre de motivation.";
-    } else {
-        $stmt = $pdo->prepare("INSERT INTO candidatures (user_id, offre_id, lettre_motivation, cv_path, date_candidature) VALUES (?, ?, ?, ?, NOW())");
-        $stmt->execute([$_SESSION['user_id'], $offre_id, $lettre, $cv_path]);
-        $success = true;
-        $message = "Votre candidature a été envoyée avec succès !";
+    if (empty($erreurs)) {
+        if (!is_dir('uploads/cv')) mkdir('uploads/cv', 0755, true);
+        $nomFich  = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '_', $nom));
+        $prenFich = ucfirst(strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $prenom)));
+        $dest     = 'uploads/cv/' . $nomFich . '_' . $prenFich . '_' . time() . '.pdf';
+        if (move_uploaded_file($_FILES['cv']['tmp_name'], $dest)) {
+            $succes = htmlspecialchars($prenom . ' ' . strtoupper($nom), ENT_QUOTES, 'UTF-8');
+        } else {
+            $erreurs[] = "Impossible de sauvegarder le fichier. Réessayez.";
+        }
     }
 }
 ?>
@@ -54,72 +50,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $offre_id > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidature - StageHub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="<?= $base_url ?>css/style.css">
-    <link rel="stylesheet" href="<?= $base_url ?>css/animations.css">
-    <link rel="stylesheet" href="<?= $base_url ?>css/candidature.css">
+    <title>Candidature</title>
 </head>
 <body>
 
-<!-- Space animation background -->
-<div class="stars"></div>
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
+<h1>Ma candidature</h1>
 
-<div class="site-container">
+<?php if (!empty($erreurs)): ?>
+    <ul>
+        <?php foreach ($erreurs as $e): ?>
+            <li>⚠️ <?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
 
-<header class="header">
-    <div class="logo">
-        <div class="logo-icon">Logo</div>
-        <span>StageHub</span>
-    </div>
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="<?= $base_url ?>">Accueil</a></li>
-            <li><a href="<?= $base_url ?>offres">Offres</a></li>
-            <li><a href="<?= $base_url ?>profil">Profil</a></li>
-        </ul>
-    </nav>
-</header>
+<?php if (!empty($succes)): ?>
 
-<main class="content">
-    <div class="candidature-form">
-        <h2><i class="fas fa-paper-plane"></i> Postuler à cette offre</h2>
+    <p>✅ Candidature envoyée avec succès !</p>
+    <p>Merci <strong><?= $succes ?></strong>, votre dossier a bien été reçu.</p>
+    <a href="offre_de_stage.php">← Retour aux offres</a>
 
-        <?php if ($message): ?>
-            <div class="message <?= $success ? 'success' : 'error' ?>">
-                <?= htmlspecialchars($message) ?>
-            </div>
-        <?php endif; ?>
+<?php else: ?>
 
-        <?php if (!$success && $offre_id > 0): ?>
-        <form method="POST" enctype="multipart/form-data">
-            <label for="cv">Votre CV (PDF) :</label>
-            <input type="file" name="cv" id="cv" accept=".pdf,.doc,.docx">
+<form method="POST" action="" enctype="multipart/form-data">
 
-            <label for="lettre">Lettre de motivation :</label>
-            <textarea name="lettre" id="lettre" 
-                placeholder="Expliquez vos motivations..."
-                required><?= htmlspecialchars($_POST['lettre'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+    <label for="prenom">Prénom</label><br>
+    <input type="text" id="prenom" name="prenom"
+        placeholder="Votre prénom"
+        value="<?= htmlspecialchars($_POST['prenom'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required><br><br>
 
-            <input type="submit" value="Envoyer ma candidature">
-        </form>
-        <?php endif; ?>
+    <label for="nom">Nom</label><br>
+    <input type="text" id="nom" name="nom"
+        placeholder="Votre nom"
+        value="<?= htmlspecialchars($_POST['nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required><br><br>
 
-        <a href="<?= $base_url ?>offres" class="back-link">← Retour aux offres</a>
-    </div>
-</main>
+    <label for="email">Email</label><br>
+    <input type="email" id="email" name="email"
+        placeholder="votre@email.com"
+        value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required><br><br>
 
-<footer class="footer">
-    <p>&copy; <?= date('Y') ?> StageHub - Tous droits réservés</p>
-</footer>
+    <label for="cv">CV (PDF — 2 Mo max)</label><br>
+    <input type="file" id="cv" name="cv" accept=".pdf" required><br><br>
 
-</div>
+    <label for="lettre">Lettre de motivation</label><br>
+    <textarea id="lettre" name="lettre"
+        placeholder="Expliquez vos motivations..."
+        required><?= htmlspecialchars($_POST['lettre'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea><br><br>
 
-<script src="<?= $base_url ?>js/main.js"></script>
+    <input type="submit" value="Envoyer ma candidature">
+
+</form>
+
+<a href="offre_de_stage.php">← Retour aux offres</a>
+
+<?php endif; ?>
+
 </body>
 </html>
