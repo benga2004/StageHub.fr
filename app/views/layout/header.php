@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,11 +6,12 @@
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content= <?= $content ?? "StageHub - Trouvez votre stage idéal" ?> >
+<meta name="description" content="<?= $content ?? 'StageHub - Trouvez votre stage idéal' ?>">
 <title><?= $title ?? "StageHub" ?></title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>css/animations.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/inscription.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/offres.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/profil.css">
@@ -25,12 +25,14 @@
 
 <body>
 
-<div class="phone-frame">
+<div class="stars"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
 
-<div class="status-bar">
-    <div class="status-bar-left">3:03</div>
-    <div class="status-bar-right">A B</div>
-</div>
+<div class="site-container">
 
 <?php if (!empty($custom_header)): ?>
 <?= $custom_header ?>
