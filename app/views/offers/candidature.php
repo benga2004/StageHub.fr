@@ -1,78 +1,33 @@
 <?php
-session_start();
-
 $title = "Candidature - StageHub";
 $content = "Postuler à une offre de stage";
 $extra_css = '<link rel="stylesheet" href="' . BASE_URL . 'css/candidature.css">';
 
 require __DIR__ . '/../layout/header.php';
-
-$succes  = '';
-$erreurs = [];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $nom    = isset($_POST['nom'])    ? trim($_POST['nom'])    : '';
-    $prenom = isset($_POST['prenom']) ? trim($_POST['prenom']) : '';
-    $email  = isset($_POST['email'])  ? trim($_POST['email'])  : '';
-    $lettre = isset($_POST['lettre']) ? trim($_POST['lettre']) : '';
-
-    if (empty($nom))    $erreurs[] = "Le nom est obligatoire.";
-    if (empty($prenom)) $erreurs[] = "Le prénom est obligatoire.";
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
-        $erreurs[] = "L'adresse email est invalide.";
-    if (empty($lettre)) $erreurs[] = "La lettre de motivation est obligatoire.";
-
-    if (!isset($_FILES['cv']) || $_FILES['cv']['error'] === UPLOAD_ERR_NO_FILE) {
-        $erreurs[] = "Veuillez déposer votre CV en PDF.";
-    } elseif ($_FILES['cv']['error'] !== UPLOAD_ERR_OK) {
-        $erreurs[] = "Erreur lors du téléversement du fichier.";
-    } elseif ($_FILES['cv']['size'] > 2 * 1024 * 1024) {
-        $erreurs[] = "Le CV ne doit pas dépasser 2 Mo.";
-    } else {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime  = finfo_file($finfo, $_FILES['cv']['tmp_name']);
-        finfo_close($finfo);
-        if ($mime !== 'application/pdf') {
-            $erreurs[] = "Le fichier doit être un PDF.";
-        }
-    }
-
-    if (empty($erreurs)) {
-        if (!is_dir('uploads/cv')) mkdir('uploads/cv', 0755, true);
-        $nomFich  = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '_', $nom));
-        $prenFich = ucfirst(strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $prenom)));
-        $dest     = 'uploads/cv/' . $nomFich . '_' . $prenFich . '_' . time() . '.pdf';
-        if (move_uploaded_file($_FILES['cv']['tmp_name'], $dest)) {
-            $succes = htmlspecialchars($prenom . ' ' . strtoupper($nom), ENT_QUOTES, 'UTF-8');
-        } else {
-            $erreurs[] = "Impossible de sauvegarder le fichier. Réessayez.";
-        }
-    }
-}
 ?>
 
 <h1>Ma candidature</h1>
 
 <?php if (!empty($erreurs)): ?>
-    <ul>
-        <?php foreach ($erreurs as $e): ?>
-            <li>⚠️ <?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="error-messages">
+        <ul>
+            <?php foreach ($erreurs as $e): ?>
+                <li>⚠️ <?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>
 
 <?php if (!empty($succes)): ?>
-
     <div class="success-message">
         <p>✅ Candidature envoyée avec succès !</p>
         <p>Merci <strong><?= $succes ?></strong>, votre dossier a bien été reçu.</p>
     </div>
-    <a href="<?= BASE_URL ?>offres">← Retour aux offres</a>
-
+    <a href="<?= BASE_URL ?>offres" class="btn btn-secondary">← Retour aux offres</a>
 <?php else: ?>
 
 <form method="POST" action="" enctype="multipart/form-data">
+    <input type="hidden" name="offre_id" value="<?= htmlspecialchars($offre_id ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
     <div class="form-group">
         <label for="prenom">Prénom</label>
@@ -105,16 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="form-group">
         <label for="lettre">Lettre de motivation</label>
-        <textarea id="lettre" name="lettre"
+        <textarea id="lettre" name="lettre" rows="8"
             placeholder="Expliquez vos motivations..."
             required><?= htmlspecialchars($_POST['lettre'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
     </div>
 
-    <input type="submit" value="Envoyer ma candidature" class="btn-submit">
-
+    <button type="submit" class="btn-submit">Envoyer ma candidature</button>
 </form>
 
-<a href="offre_de_stage.php">← Retour aux offres</a>
+<a href="<?= BASE_URL ?>offres" class="btn btn-secondary" style="margin-top: 20px; display: inline-block;">← Retour aux offres</a>
 
 <?php endif; ?>
 

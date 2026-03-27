@@ -1,0 +1,132 @@
+/* ============================================
+   SIDEBAR MOBILE
+   ============================================ */
+
+.sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 300px;
+    background: white;
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+/* Barre colorée en haut */
+.sidebar::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    flex-shrink: 0;
+}
+
+.sidebar-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    padding: 16px 20px;
+    align-self: flex-end;
+    transition: color 0.2s ease, transform 0.3s ease;
+    line-height: 1;
+}
+
+.sidebar-close:hover {
+    color: #333;
+    transform: rotate(90deg);
+}
+
+.sidebar-items {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 8px 0 20px;
+    overflow-y: auto;
+}
+
+/* Animation des liens en cascade */
+.sidebar.active .sidebar-items a {
+    animation: slideInLeft 0.35s ease backwards;
+}
+
+.sidebar.active .sidebar-items a:nth-child(1) { animation-delay: 0.05s; }
+.sidebar.active .sidebar-items a:nth-child(2) { animation-delay: 0.10s; }
+.sidebar.active .sidebar-items a:nth-child(3) { animation-delay: 0.15s; }
+.sidebar.active .sidebar-items a:nth-child(4) { animation-delay: 0.20s; }
+
+.sidebar-items a {
+    padding: 14px 24px;
+    text-decoration: none;
+    color: #444;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-items a:hover {
+    background: #f5f3ff;
+    color: #667eea;
+    border-left-color: #667eea;
+    padding-left: 30px;
+}
+
+.sidebar-items a.logout-btn {
+    color: #e74c3c;
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+.sidebar-items a.logout-btn:hover {
+    background: #fff0ef;
+    border-left-color: #e74c3c;
+}
+
+/* Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    display: none;
+    z-index: 1000;
+    transition: background 0.35s ease;
+    backdrop-filter: blur(0px);
+}
+
+.sidebar-overlay.active {
+    display: block;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

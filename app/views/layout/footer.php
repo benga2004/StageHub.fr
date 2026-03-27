@@ -40,9 +40,8 @@
     </div>
 </footer>
 
-</div>
-
-<script src="../../../public/js/script.js"></script>
+<script src="<?= BASE_URL ?>js/script.js"></script>
+<script src="<?= BASE_URL ?>js/sidebar.js"></script>
 
 </body>
 

@@ -2,11 +2,11 @@
 class Database {
     private static ?PDO $instance = null;
 
-    // ← Modifie ces 4 constantes selon ton environnement
+    
     private const HOST    = 'localhost';
     private const DBNAME  = 'stage_db';
     private const USER    = 'root';
-    private const PASS    = 'StageHub.fr@123';          // vide sur XAMPP/WAMP par défaut
+    private const PASS    = 'StageHub.fr@123';          
 
     public static function connect(): PDO {
         if (self::$instance === null) {
