@@ -32,6 +32,30 @@ margin-bottom:6px;
 
 }
 
+.offer-card {
+    text-align: center;
+}
+
+.offer-card .details-btn {
+    display: inline-block;
+    margin: 12px auto 0;
+    padding: 10px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #fff;
+    background: #2f6ad4;
+    font-weight: 600;
+    border: 1px solid #2d66cc;
+    box-shadow: 0 6px 14px rgba(40, 84, 178, 0.22);
+    transition: background .2s, transform .2s;
+}
+
+.offer-card .details-btn:hover,
+.offer-card .details-btn:focus {
+    background: #3471e2;
+    transform: translateY(-1px);
+}
+
 .company{
 
 color:#667eea;
@@ -174,10 +198,22 @@ i {
 
 /* Détails de l'offre */
 .offer-detail.container {
-    max-width: 980px;
-    margin: 2.5rem auto 3rem;
+    max-width: 900px;
+    margin: 3rem auto 3.5rem;
     padding: 0 1.25rem;
     color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.offer-detail.container .offer-hero,
+.offer-detail.container .offer-meta,
+.offer-detail.container .offer-section,
+.offer-detail.container .offer-actions {
+    width: 100%;
+    max-width: 780px;
 }
 
 .back-link {
@@ -298,9 +334,56 @@ i {
 
 .offer-actions {
     margin-top: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.offer-actions .cta-btn {
+    min-width: 220px;
+    max-width: 320px;
+    padding: .85rem 1.25rem;
 }
 
 @media (max-width: 768px) {
     .offer-hero { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
     .offer-meta { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   RESPONSIVE - TABLET & DESKTOP
+   ============================================ */
+
+@media (min-width: 768px) {
+    .offer-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-bar {
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    #search {
+        width: 300px;
+    }
+
+    .search-form {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .offer-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .offer-cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
 }

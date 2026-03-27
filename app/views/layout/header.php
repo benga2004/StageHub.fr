@@ -22,7 +22,7 @@
 
 <body>
 
-<div class="phone-frame">
+<div>
 
 <div class="status-bar">
     <div class="status-bar-left">3:03</div>
@@ -37,7 +37,15 @@
         <div class="logo-icon">Logo</div>
         <span>StageHub</span>
     </div>
-    <button class="menu-icon" aria-label="Menu">☰</button>
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="<?= BASE_URL ?>">Accueil</a></li>
+            <li><a href="<?= BASE_URL ?>offres">Offres</a></li>
+            <li><a href="<?= BASE_URL ?>inscription">Inscription</a></li>
+            <li><a href="<?= BASE_URL ?>connexion">Connexion</a></li>
+        </ul>
+    </nav>
+    <button class="menu-icon" id="menu-toggle" aria-label="Menu">☰</button>
 </header>
 <?php endif; ?>
 

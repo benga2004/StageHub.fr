@@ -111,3 +111,46 @@
     text-align: center;
     text-decoration: none;
 }
+
+/* ============================================
+   RESPONSIVE - TABLET & DESKTOP
+   ============================================ */
+
+@media (min-width: 768px) {
+    .profile-banner {
+        padding: 20px;
+    }
+
+    .profile-banner h2 {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .info-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .label {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .btn-edit,
+    .btn-logout {
+        width: auto;
+        max-width: 200px;
+        margin: 0 auto 10px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card {
+        max-width: 800px;
+        margin: 0 auto 20px;
+    }
+}

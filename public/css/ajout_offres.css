@@ -106,3 +106,42 @@
 .remove-tag:hover {
     color: #f00;
 }
+
+/* ============================================
+   RESPONSIVE - TABLET & DESKTOP
+   ============================================ */
+
+@media (min-width: 768px) {
+    .editor-toolbar {
+        padding: 8px;
+    }
+
+    .editor-content {
+        min-height: 200px;
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .avantages-group {
+        gap: 12px;
+    }
+
+    .avantage-tag {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+
+    .avantage-custom-add input {
+        padding: 8px 14px;
+        font-size: 1rem;
+    }
+
+    .avantage-custom-add button {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* Additional styles if needed */
+}

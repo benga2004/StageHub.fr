@@ -6,7 +6,7 @@ class Database {
     private const HOST    = 'localhost';
     private const DBNAME  = 'stage_db';
     private const USER    = 'root';
-    private const PASS    = 'JeanDona@04';          // vide sur XAMPP/WAMP par défaut
+    private const PASS    = 'StageHub.fr@123';          // vide sur XAMPP/WAMP par défaut
 
     public static function connect(): PDO {
         if (self::$instance === null) {
