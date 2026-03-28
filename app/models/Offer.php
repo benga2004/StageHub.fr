@@ -40,15 +40,20 @@ class Offer {
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare('
-            INSERT INTO offres (titre, description, entreprise_id, remuneration, avantages, date_offre)
-            VALUES (:titre, :description, :entreprise_id, :remuneration, :avantages, NOW())
+            INSERT INTO offres (titre, description, entreprise_id, ville, domaine, nb_souhaite, delai, remuneration, r_period, avantages, date_offre)
+            VALUES (:titre, :description, :entreprise_id, :ville, :domaine, :nb_souhaite, :delai, :remuneration, :r_period, :avantages, NOW())
         ');
         return $stmt->execute([
             ':titre'         => $data['jobTitle'],
             ':description'   => $data['description'],
             ':entreprise_id' => $data['entreprise_id'],
+            ':ville'         => $data['ville'],
+            ':domaine'       => $data['domaine'],
+            ':nb_souhaite'   => $data['numberOfJob'] ?? 0,
+            ':delai'         => $data['delai'],
             ':remuneration'  => $data['minSalary'],
-            ':avantages'      => implode(',', $data['avantages'] ?? []),
+            ':r_period'      => $data['frequence'] ?? '',
+            ':avantages'     => implode(',', $data['avantages'] ?? []),
         ]);
     }
 

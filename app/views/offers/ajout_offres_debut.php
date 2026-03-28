@@ -3,7 +3,7 @@
 
 <h1>Nouvelle offre de stage</h1>
 
-<form action="#" method="POST">
+<form action="<?= BASE_URL ?>offres/ajouter" method="POST">
 
     <fieldset>
         <legend class="sr-only">Statut de l'entreprise</legend>
@@ -46,7 +46,7 @@
 
         <div class="form-group">
             <label for="description">Description de l'entreprise *</label>
-            <input type="text" id="description" name="description">
+            <textarea id="description" name="description" rows="4"></textarea>
         </div>
 
         <div class="form-group">
@@ -57,6 +57,16 @@
         <div class="form-group">
             <label for="telephone">Téléphone *</label>
             <input type="tel" id="telephone" name="telephone">
+        </div>
+
+        <div class="form-group">
+            <label for="ville">Ville *</label>
+            <input type="text" id="ville" name="ville">
+        </div>
+
+        <div class="form-group">
+            <label for="secteur">Secteur *</label>
+            <input type="text" id="secteur" name="secteur">
         </div>
 
         <button type="submit" class="btn-submit">Continuer</button>

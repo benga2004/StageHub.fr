@@ -1,9 +1,9 @@
 <?php $title = "Ajouter une offre - StageHub"; ?>
-<?php include '../layout/header.php'; ?>
+<?php require __DIR__ . '/../layout/header.php'; ?>
 
 <h1>Informations de base</h1>
 
-<form action="offres/ajouter/etape2" method="POST">
+<form action="<?= BASE_URL ?>offres/ajouter/etape1" method="POST">
 
     <fieldset>
         <legend>Informations du poste</legend>
@@ -48,14 +48,14 @@
         </div>
 
         <div class="form-group">
-            <label for="numberOfJob">Nombre de stagiaires souhaités *</label>
-            <input type="number" id="numberOfJob" name="numberOfJob" value="1" min="1" required>
+            <label for="nbOfJobs">Nombre de stagiaires souhaités *</label>
+            <input type="number" id="nbOfJobs" name="nbOfJobs" value="1" min="1" required>
         </div>
 
     </fieldset>
-
+    
     <button type="submit" class="btn-submit" >Continuer</button>
 
 </form>
 
-<?php include '../layout/footer.php'; ?>
+<?php require __DIR__ . '/../layout/footer.php'; ?>

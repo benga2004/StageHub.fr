@@ -1,5 +1,11 @@
 <h1>Offres de stage</h1>
 
+<?php if (!empty($successMessage)): ?>
+    <div class="success-message" style="margin-bottom:1rem; padding: 10px; border: 1px solid #40a84e; background:#e8f7e8; color:#2b662b; border-radius:6px;">
+        <?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8') ?>
+    </div>
+<?php endif; ?>
+
 <section id="search-bar" aria-label="Rechercher une offre">
     <form action="<?= BASE_URL ?>offres" method="get" class="search-form" autocomplete="off">
         <div class="field">

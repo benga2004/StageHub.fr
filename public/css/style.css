@@ -399,6 +399,7 @@ main.content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 24px;
+    position: center;
 }
 
 .feature-card {
@@ -474,7 +475,7 @@ main.content {
     display: flex;
     gap: 20px;
     justify-content: center;
-    flex-wrap: wrap;
+    
 }
 
 .stat-item {
@@ -1068,6 +1069,6 @@ main.content {
 
 @media (min-width: 1280px) {
     .feature-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }

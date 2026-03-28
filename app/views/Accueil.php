@@ -1,4 +1,4 @@
-<!-- Page d'accueil StageHub -->
+<!-- Page d'accueil StageHub_ -->
 <section class="home-hero">
   <div class="hero-content">
     <h1>StageHub, votre tremplin vers le monde professionnel</h1>

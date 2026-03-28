@@ -183,6 +183,15 @@ h1 {
     outline-offset: 2px;
 }
 
+.badge {
+    display: inline-block;
+    background: #e8f4fd;
+    color: #1a73e8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 3px;
+}
 
 /* Pagination */
 .pagination {

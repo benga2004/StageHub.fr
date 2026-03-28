@@ -44,3 +44,9 @@ if (customAvantageInput) {
         if (e.key === 'Enter') { e.preventDefault(); addCustomAvantage(); }
     });
 }
+
+// Synchronise le contenu de l'éditeur vers le champ caché avant envoi
+document.querySelector('form').addEventListener('submit', function() {
+    document.getElementById('jobDescriptionHidden').value = 
+        document.getElementById('jobDescription').innerHTML;
+});

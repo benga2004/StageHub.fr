@@ -11,6 +11,7 @@
             <ul>
                 <li><a href="<?= BASE_URL ?>">Accueil</a></li>
                 <li><a href="<?= BASE_URL ?>offres">Offres de stage</a></li>
+                <li><a href="<?= BASE_URL ?>offres/ajouter">Publier une offre (Pilote)</a></li>
                 <li><a href="<?= BASE_URL ?>inscription">S'inscrire</a></li>
                 <li><a href="<?= BASE_URL ?>connexion">Se connecter</a></li>
             </ul>

@@ -32,23 +32,25 @@ require __DIR__ . '/../layout/header.php';
         </div>
         <div>
             <span>Rémunération</span>
-            <strong><?= htmlspecialchars($offre['remuneration'], ENT_QUOTES, 'UTF-8') ?></strong>
+            <strong><?= htmlspecialchars($offre['remuneration'], ENT_QUOTES, 'UTF-8') ?> par <?= htmlspecialchars($offre['r_period'], ENT_QUOTES, 'UTF-8') ?></strong>
         </div>
     </section>
 
     <section class="offer-section">
         <h3>Description</h3>
-        <p><?= nl2br(htmlspecialchars($offre['description'], ENT_QUOTES, 'UTF-8')) ?></p>
+        <p><?= nl2br($offre['description']) ?></p>
     </section>
 
-    <?php if (!empty($offre['avantages']) && is_array($offre['avantages'])) : ?>
+    <?php if (!empty($offre['avantages'])) : ?>
     <section class="offer-section">
+        <?php $avantages = explode(',', $offre['avantages'] ?? ''); ?>
+
         <h3>Avantages</h3>
-        <ul class="offer-advantages">
-            <?php foreach ($offre['avantages'] as $avantage) : ?>
-                <li><?= htmlspecialchars($avantage, ENT_QUOTES, 'UTF-8') ?></li>
+        <div class="avantages">
+            <?php foreach ($avantages as $avantage): ?>
+                <span class="badge"><?= htmlspecialchars(trim($avantage)) ?></span>
             <?php endforeach; ?>
-        </ul>
+        </div>
     </section>
     <?php endif; ?>
 

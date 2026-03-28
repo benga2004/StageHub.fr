@@ -12,8 +12,11 @@ class AuthController {
                 $_SESSION['user'] = $user;
                 header('Location: ' . BASE_URL);
                 exit;
-            }
+            } else {
             $erreur = 'Email ou mot de passe incorrect.';
+            echo $erreur;
+            }
+
         }
         require BASE_PATH . '/app/views/auth/connexion.php';
     }

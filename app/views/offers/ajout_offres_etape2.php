@@ -1,8 +1,9 @@
 <?php $title = "Ajouter une offre - StageHub"; ?>
-<?php include '../layout/header.php'; ?>
+<?php require __DIR__ . '/../layout/header.php'; ?>
 
 <h1>Détails du stage</h1>
 
+<form action="<?= BASE_URL ?>offres/ajouter/etape2" method="POST" onsubmit="document.getElementById('jobDescriptionHidden').value = document.getElementById('jobDescription').innerHTML;">
 
     <fieldset>
         <legend>Informations du poste</legend>
@@ -25,7 +26,22 @@
                 role="textbox"
                 aria-multiline="true"
                 aria-label="Description du poste"
-            ></div>
+            ><p><strong>À propos du poste</strong></p>
+            <p>Décrivez ici le contexte général du stage.</p>
+
+            <p><strong>Missions</strong></p>
+            <ul>
+                <li>Mission principale 1</li>
+                <li>Mission principale 2</li>
+                <li>Mission principale 3</li>
+            </ul>
+
+            <p><strong>Profil recherché</strong></p>
+            <ul>
+                <li>Formation en cours (ex: Bac+3 en informatique)</li>
+                <li>Compétences requises</li>
+                <li>Qualités attendues</li>
+            </ul></div>
             <!-- Champ caché pour envoyer le contenu via POST -->
             <input type="hidden" name="jobDescription" id="jobDescriptionHidden">
         </div>
@@ -55,10 +71,10 @@
         <div class="form-group">
             <label for="frequence">Fréquence</label>
             <select id="frequence" name="frequence">
-                <option value="fMonth">Par mois</option>
-                <option value="fWeek">Par semaine</option>
-                <option value="fDay">Par jour</option>
-                <option value="fHour">Par heure</option>
+                <option value="Mois">Par mois</option>
+                <option value="Semaine">Par semaine</option>
+                <option value="Jour">Par jour</option>
+                <option value="Heure">Par heure</option>
             </select>
         </div>
 
@@ -94,11 +110,8 @@
 
     </fieldset>
 
-    <button type="submit" class="btn-submit" onclick="
-        document.getElementById('jobDescriptionHidden').value =
-        document.getElementById('jobDescription').innerHTML;
-    ">Continuer</button>
+    <button type="submit" class="btn-submit">Enregistrer l'offre</button>
 
 </form>
 
-<?php include '../layout/footer.php'; ?>
+<?php require __DIR__ . '/../layout/footer.php'; ?>

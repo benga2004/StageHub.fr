@@ -25,8 +25,7 @@ class OfferController {
         $content = "Bienvenue sur StageHub, votre plateforme de référence pour trouver les meilleures offres de stage en entreprise. Explorez notre large sélection d'opportunités de stage, postulez facilement et lancez votre carrière dès aujourd'hui !";
 
         require BASE_PATH . '/app/views/layout/header.php';
-        require BASE_PATH . '/app/views/Accueil.php';
-
+        
         $model   = new Offer();
         $companyModel = new Company();
 
@@ -39,6 +38,7 @@ class OfferController {
         $total      = $model->countFiltered($query, $ville, $domaine);
         $pages      = (int)ceil(max(1, $total) / $this->parPage);
 
+        require BASE_PATH . '/app/views/Accueil.php';
         require BASE_PATH . '/app/views/offers/list.php';
         require BASE_PATH . '/app/views/layout/footer.php';
     }
@@ -61,6 +61,9 @@ class OfferController {
         $offresPage = $model->search($query, $ville, $domaine, $this->parPage, $offset);
         $total      = $model->countFiltered($query, $ville, $domaine);
         $pages      = (int)ceil(max(1, $total) / $this->parPage);
+
+        $successMessage = $_SESSION['success_message'] ?? null;
+        unset($_SESSION['success_message']);
 
         require BASE_PATH . '/app/views/offers/list.php';
         require BASE_PATH . '/app/views/layout/footer.php';
@@ -87,29 +90,41 @@ class OfferController {
                     $_SESSION['offer_begin1'] = [
                         'enterpriseNameSearch' => htmlspecialchars($_POST['enterpriseNameSearch'] ?? ''),
                     ];
-                    $entreprise_id = (new Company())->getByName($_SESSION['offer_begin1']['enterpriseNameSearch']);
-                    if (!$entreprise_id) {
+                    $entreprise = (new Company())->getByName($_SESSION['offer_begin1']['enterpriseNameSearch']);
+                    if (!$entreprise) {
                         echo "<script>alert('Entreprise non trouvée. Veuillez vérifier le nom ou créer un compte pour votre entreprise.');</script>";
                         header('Location: ' . BASE_URL . 'offres/ajouter');
                         exit;
                     }
+                    $_SESSION['offer_begin1']['entreprise_id'] = $entreprise['id'];
 
                     header('Location: ' . BASE_URL . 'offres/ajouter/etape1');
                     exit;
                 }
                 if ($_POST['enterpriseStatut'] === 'hasNoAccount') {
+                    $enterpriseName = htmlspecialchars($_POST['enterpriseName'] ?? '');
                     $_SESSION['offer_begin2'] = [
-                        'enterpriseName' => htmlspecialchars($_POST['enterpriseName'] ?? ''),
+                        'enterpriseName' => $enterpriseName,
                         'description' => htmlspecialchars($_POST['description'] ?? ''),
                         'email' => htmlspecialchars($_POST['email'] ?? ''),
                         'telephone' => htmlspecialchars($_POST['telephone'] ?? ''),
+                        'ville' => htmlspecialchars($_POST['ville'] ?? ''),
+                        'secteur' => htmlspecialchars($_POST['secteur'] ?? ''),
                     ];
+
                     (new Company())->create([
                         'nom' => $_SESSION['offer_begin2']['enterpriseName'],
-                        'description' => htmlspecialchars($_POST['description'] ?? ''),
-                        'email' => htmlspecialchars($_POST['email'] ?? ''),
-                        'telephone' => htmlspecialchars($_POST['telephone'] ?? ''),
+                        'description' => $_SESSION['offer_begin2']['description'],
+                        'email' => $_SESSION['offer_begin2']['email'],
+                        'telephone' => $_SESSION['offer_begin2']['telephone'],
+                        'ville' => $_SESSION['offer_begin2']['ville'],
+                        'secteur' => $_SESSION['offer_begin2']['secteur'],
                     ]);
+
+                    $entreprise = (new Company())->getByName($enterpriseName);
+                    if ($entreprise) {
+                        $_SESSION['offer_begin1']['entreprise_id'] = $entreprise['id'];
+                    }
 
                     header('Location: ' . BASE_URL . 'offres/ajouter/etape1');
                     exit;
@@ -117,18 +132,18 @@ class OfferController {
             }
             
         }
-        require BASE_PATH . '/app/views/offers/ajout_offres.php';
+        require BASE_PATH . '/app/views/offers/ajout_offres_debut.php';
     }
 
     public function addStep1(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['offer_step1'] = [
-                'entreprise_id' => (new Company())->getByName($_SESSION['offer_begin']['enterpriseNameSearch'])['id'] ?? null,
-                'jobTitle'    => htmlspecialchars($_POST['jobTitle']),
-                'mobilite'    => htmlspecialchars($_POST['mobilite']),
-                'location'    => htmlspecialchars($_POST['location']),
-                'delai'       => htmlspecialchars($_POST['delai']),
-                'numberOfJob' => (int)$_POST['numberOfJob'],
+                'entreprise_id' => $_SESSION['offer_begin1']['entreprise_id'] ?? null,
+                'jobTitle'    => htmlspecialchars($_POST['jobTitle'] ?? ''),
+                'ville'       => htmlspecialchars($_POST['location'] ?? ''),
+                'domaine'     => htmlspecialchars($_POST['domaine'] ?? ''),
+                'delai'       => htmlspecialchars($_POST['delai'] ?? ''),
+                'numberOfJob' => (int)($_POST['numberOfJob'] ?? 0),
             ];
             header('Location: ' . BASE_URL . 'offres/ajouter/etape2');
             exit;
@@ -153,13 +168,16 @@ class OfferController {
         if (!$step1) { header('Location: ' . BASE_URL . 'offres/ajouter/etape1'); exit; }
 
         $data = array_merge($step1, [
-            'description'  => $_POST['jobDescription'],
-            'minSalary'    => (int)$_POST['minSalary'],
+            'description'  => strip_tags($_POST['jobDescription'],'<p><strong><ul><li><br><em><h2><h3>'),
+            'duree'       => htmlspecialchars($_POST['durationNumber']) . ' ' . htmlspecialchars($_POST['durationPeriod']),
+            'minSalary'    => (int)($_POST['minSalary'] ?? 0),
+            'frequence'     => htmlspecialchars($_POST['frequence'] ?? ''),
             'avantages'    => $_POST['avantages'] ?? [],
         ]);
 
         (new Offer())->create($data);
         unset($_SESSION['offer_step1']);
+        $_SESSION['success_message'] = '✅ Offre de stage ajoutée avec succès !';
         header('Location: ' . BASE_URL . 'offres');
         exit;
     }

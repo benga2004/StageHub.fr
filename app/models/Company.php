@@ -23,15 +23,15 @@ class Company {
     }
 
     public function getByName(string $name): ?array {
-        $stmt = $this->db->prepare('SELECT * FROM entreprises WHERE nom = :nom');
+        $stmt = $this->db->prepare('SELECT * FROM entreprises WHERE LOWER(nom) = LOWER(:nom)');
         $stmt->execute([':nom' => $name]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function create(array $data): bool {
         $stmt = $this->db->prepare('
-            INSERT INTO entreprises (nom, description, email, telephone)
-            VALUES (:nom, :description, :email, :telephone)
+            INSERT INTO entreprises (nom, description, email, telephone, ville, secteur)
+            VALUES (:nom, :description, :email, :telephone, :ville, :secteur)
         ');
         return $stmt->execute($data);
     }
@@ -39,7 +39,7 @@ class Company {
     public function update(int $id, array $data): bool {
         $stmt = $this->db->prepare('
             UPDATE entreprises SET nom=:nom, description=:description,
-            email=:email, telephone=:telephone WHERE id=:id
+            email=:email, telephone=:telephone, ville=:ville, secteur=:secteur WHERE id=:id
         ');
         $data[':id'] = $id;
         return $stmt->execute($data);
