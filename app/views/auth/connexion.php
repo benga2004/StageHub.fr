@@ -3,7 +3,7 @@ $title = "Connexion - StageHub";
 $content = "Connexion à StageHub";
 require BASE_PATH . '/app/views/layout/header.php'; ?>
 
-
+<div class="auth-card" data-page="connexion">
 <h1>Connectez-Vous</h1>
 
 <?php if (!empty($erreur)): ?>
@@ -27,8 +27,9 @@ require BASE_PATH . '/app/views/layout/header.php'; ?>
 
 </form>
 <div class="login-section">
-    <a href="#forgot">Mot de passe oublié ?</a>
-    <p>Vous n'avez pas de compte ? <a href="inscription.php">Inscrivez-vous</a></p>
+    <a href="#forgot">Mot de passe oublié ?</a>
+    <p>Vous n'avez pas de compte ? <a href="<?= BASE_URL ?>inscription" class="auth-switch-link" data-direction="to-inscription">Inscrivez-vous</a></p>
 </div>
+</div><!-- /.auth-card -->
 
 <?php require BASE_PATH . '/app/views/layout/footer.php';?>

@@ -66,7 +66,7 @@
 <?php else: ?>
 <header class="header">
     <div class="logo">
-        <div class="logo-icon">Logo</div>
+        <img src="<?= BASE_URL ?>images/Logo.png?v=2" alt="StageHub logo" class="logo-icon">
         <span>StageHub</span>
     </div>
     <nav class="nav-menu" id="nav-menu">

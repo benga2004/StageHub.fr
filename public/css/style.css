@@ -66,18 +66,13 @@ header.header {
 }
 
 .logo-icon {
-    background: rgba(255,255,255,0.2);
-    color: white;
     width: 40px;
     height: 40px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 14px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 

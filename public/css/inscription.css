@@ -160,6 +160,45 @@ fieldset {
     flex-shrink: 0;
 }
 
+/* ============================================
+   AUTH FLIP TRANSITION
+   ============================================ */
+
+/* Conteneur de la carte auth */
+.auth-card {
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+}
+
+/* Sortie vers la gauche (connexion → inscription) */
+@keyframes authFlipOutLeft {
+    from { transform: perspective(800px) rotateY(0deg);   opacity: 1; }
+    to   { transform: perspective(800px) rotateY(70deg);  opacity: 0; }
+}
+
+/* Entrée depuis la droite (on arrive sur inscription) */
+@keyframes authFlipInRight {
+    from { transform: perspective(800px) rotateY(-70deg); opacity: 0; }
+    to   { transform: perspective(800px) rotateY(0deg);   opacity: 1; }
+}
+
+/* Sortie vers la droite (inscription → connexion) */
+@keyframes authFlipOutRight {
+    from { transform: perspective(800px) rotateY(0deg);   opacity: 1; }
+    to   { transform: perspective(800px) rotateY(-70deg); opacity: 0; }
+}
+
+/* Entrée depuis la gauche (on arrive sur connexion) */
+@keyframes authFlipInLeft {
+    from { transform: perspective(800px) rotateY(70deg);  opacity: 0; }
+    to   { transform: perspective(800px) rotateY(0deg);   opacity: 1; }
+}
+
+.auth-flip-out-left  { animation: authFlipOutLeft  0.35s cubic-bezier(0.4, 0, 1, 1)    forwards; }
+.auth-flip-out-right { animation: authFlipOutRight 0.35s cubic-bezier(0.4, 0, 1, 1)    forwards; }
+.auth-flip-in-right  { animation: authFlipInRight  0.4s  cubic-bezier(0, 0, 0.2, 1) 0.05s backwards; }
+.auth-flip-in-left   { animation: authFlipInLeft   0.4s  cubic-bezier(0, 0, 0.2, 1) 0.05s backwards; }
+
 .auth-error a {
     color: #c53030;
     font-weight: 700;
