@@ -1,5 +1,47 @@
 
 // ============================================
+// Auth — flip transition connexion ↔ inscription
+// ============================================
+(function () {
+    var card = document.querySelector('.auth-card');
+    if (!card) return;
+
+    // Appliquer l'animation d'entrée si on arrive depuis la page sœur
+    var incoming = sessionStorage.getItem('authFlipIncoming');
+    if (incoming) {
+        sessionStorage.removeItem('authFlipIncoming');
+        card.classList.add(incoming);
+    }
+
+    // Intercepter les clics sur les liens de bascule
+    document.querySelectorAll('.auth-switch-link').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            var href      = this.href;
+            var direction = this.dataset.direction; // 'to-inscription' ou 'to-connexion'
+
+            // Classe de sortie + classe d'entrée à stocker
+            var outClass, inClass;
+            if (direction === 'to-inscription') {
+                outClass = 'auth-flip-out-left';
+                inClass  = 'auth-flip-in-right';
+            } else {
+                outClass = 'auth-flip-out-right';
+                inClass  = 'auth-flip-in-left';
+            }
+
+            sessionStorage.setItem('authFlipIncoming', inClass);
+            card.classList.add(outClass);
+
+            // Naviguer après la fin de l'animation de sortie (~350ms)
+            setTimeout(function () {
+                window.location.href = href;
+            }, 340);
+        });
+    });
+}());
+
+// ============================================
 // Sélectionneur entreprise
 // ============================================
 const select = document.getElementById("enterpriseStatut");
@@ -46,10 +88,16 @@ if (customAvantageInput) {
 }
 
 // Synchronise le contenu de l'éditeur vers le champ caché avant envoi
-document.querySelector('form').addEventListener('submit', function() {
-    document.getElementById('jobDescriptionHidden').value = 
-        document.getElementById('jobDescription').innerHTML;
-});
+// (uniquement sur la page qui possède l'éditeur riche)
+const jobDescEditor = document.getElementById('jobDescription');
+if (jobDescEditor) {
+    const editorForm = jobDescEditor.closest('form');
+    if (editorForm) {
+        editorForm.addEventListener('submit', function () {
+            document.getElementById('jobDescriptionHidden').value = jobDescEditor.innerHTML;
+        });
+    }
+}
 // ============================================
 // Wishlist — toggle bookmark par fetch
 // ============================================

@@ -24,7 +24,7 @@ require __DIR__ . '/../layout/header.php';
         </div>
         <div>
             <span>Durée</span>
-            <strong><?= htmlspecialchars($offre['duree'], ENT_QUOTES, 'UTF-8') ?></strong>
+            <strong><?= $offre['duree'] ? htmlspecialchars($offre['duree'], ENT_QUOTES, 'UTF-8') : '—' ?></strong>
         </div>
         <div>
             <span>Domaine</span>

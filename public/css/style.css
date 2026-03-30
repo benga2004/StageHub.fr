@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f4f6fb;
     color: #1a1a2e;
     min-height: 100vh;
@@ -66,18 +66,13 @@ header.header {
 }
 
 .logo-icon {
-    background: rgba(255,255,255,0.2);
-    color: white;
     width: 40px;
     height: 40px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 14px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
@@ -409,9 +404,8 @@ main.content {
 
 .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
     gap: 24px;
-    position: center;
 }
 
 .feature-card {
@@ -487,11 +481,12 @@ main.content {
     display: flex;
     gap: 20px;
     justify-content: center;
-    
+    flex-wrap: wrap;
 }
 
 .stat-item {
     min-width: 150px;
+    flex: 1 1 120px;
     text-align: center;
     padding: 20px;
     background: rgba(255,255,255,0.1);
@@ -1452,6 +1447,19 @@ main.content {
         padding: 30px 20px;
     }
 
+    .stats-grid {
+        gap: 12px;
+    }
+
+    .stat-item {
+        min-width: 0;
+        flex: 1 1 calc(33% - 12px);
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+    }
+
     .home-cta {
         padding: 40px 20px;
     }
@@ -1484,6 +1492,18 @@ main.content {
 
     .nav-menu {
         display: block;
+    }
+
+    /* Réduire le padding des liens pour éviter le débordement
+       quand plusieurs éléments de nav sont présents */
+    .nav-menu a {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .nav-username {
+        font-size: 13px;
+        padding: 4px 8px;
     }
 
     main.content {

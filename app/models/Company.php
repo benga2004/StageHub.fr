@@ -29,11 +29,17 @@ class Company {
     }
 
     public function create(array $data): bool {
-        $stmt = $this->db->prepare('
-            INSERT INTO entreprises (nom, description, email, telephone, ville, secteur)
-            VALUES (:nom, :description, :email, :telephone, :ville, :secteur)
-        ');
-        return $stmt->execute($data);
+        try {
+            $stmt = $this->db->prepare('
+                INSERT INTO entreprises (nom, description, email, telephone, ville, secteur)
+                VALUES (:nom, :description, :email, :telephone, :ville, :secteur)
+            ');
+            return $stmt->execute($data);
+        } catch (PDOException $e) {
+            // Contrainte UNIQUE sur nom : l'entreprise existe déjà
+            if ($e->getCode() === '23000') return false;
+            throw $e;
+        }
     }
 
     public function update(int $id, array $data): bool {

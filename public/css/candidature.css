@@ -204,6 +204,25 @@
     height: 100%;
 }
 
+/* ── État : fichier sélectionné ── */
+.cand-file-drop.has-file {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.cand-file-drop.has-file .cand-file-icon {
+    color: #16a34a;
+}
+
+.cand-file-drop.has-file .cand-file-label {
+    color: #15803d;
+    font-weight: 600;
+}
+
+.cand-file-drop.has-file .cand-file-browse {
+    color: #15803d;
+}
+
 /* ── textarea resize ── */
 form textarea {
     resize: vertical;

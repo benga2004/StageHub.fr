@@ -9,6 +9,9 @@
 <meta name="description" content= <?= $content ?? "StageHub - Trouvez votre stage idéal" ?> >
 <title><?= $title ?? "StageHub" ?></title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=2">
@@ -63,7 +66,7 @@
 <?php else: ?>
 <header class="header">
     <div class="logo">
-        <div class="logo-icon">Logo</div>
+        <img src="<?= BASE_URL ?>images/Logo.png?v=2" alt="StageHub logo" class="logo-icon">
         <span>StageHub</span>
     </div>
     <nav class="nav-menu" id="nav-menu">

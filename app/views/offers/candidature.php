@@ -101,6 +101,28 @@ require __DIR__ . '/../layout/header.php';
             </button>
         </form>
 
+        <script>
+        (function () {
+            var input = document.getElementById('cv');
+            if (!input) return;
+            input.addEventListener('change', function () {
+                var drop  = this.closest('.cand-file-drop');
+                var icon  = drop.querySelector('.cand-file-icon');
+                var label = drop.querySelector('.cand-file-label');
+                if (this.files && this.files[0]) {
+                    var name = this.files[0].name;
+                    drop.classList.add('has-file');
+                    icon.className = 'fas fa-check-circle cand-file-icon';
+                    label.innerHTML = name;
+                } else {
+                    drop.classList.remove('has-file');
+                    icon.className = 'fas fa-cloud-upload-alt cand-file-icon';
+                    label.innerHTML = 'Glissez votre PDF ici ou <span class="cand-file-browse">parcourez</span>';
+                }
+            });
+        })();
+        </script>
+
         <?php endif; ?>
 
     </div><!-- /.cand-body -->

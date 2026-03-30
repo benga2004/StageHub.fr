@@ -1,6 +1,7 @@
 
 
 
+<div class="auth-card" data-page="inscription">
 <h1>Inscription</h1>
 
 <?php if (!empty($erreur)): ?>
@@ -64,8 +65,8 @@
     </fieldset>
 
     <div class="login-section">
-        <p>Vous avez déjà un compte?</p>
-        <a href="<?= BASE_URL ?>connexion">Connectez-vous</a>
+        <p>Vous avez déjà un compte ?</p>
+        <a href="<?= BASE_URL ?>connexion" class="auth-switch-link" data-direction="to-connexion">Connectez-vous</a>
     </div>
 </form>
-
+</div><!-- /.auth-card -->

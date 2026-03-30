@@ -388,6 +388,12 @@ h1 {
         align-items: center;
     }
 
+    /* L'en-tête doit toujours occuper toute la largeur de la carte
+       pour que justify-content: space-between fonctionne */
+    .offer-card-header {
+        width: 100%;
+    }
+
     #search-bar {
         flex-direction: column;
         justify-content: center;
