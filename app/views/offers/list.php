@@ -82,12 +82,12 @@
 <!-- Pagination -->
 <div class="pagination">
     <?php if ($page > 1): ?>
-        <a href="?page=<?= $page - 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">&#8249; Précédent</a>
+        <a href="<?= BASE_URL ?>offres?page=<?= $page - 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">&#8249; Précédent</a>
     <?php endif; ?>
     <?= $page ?>/<?= $pages?> 
 
     <?php if ($page < $pages): ?>
-        <a href="?page=<?= $page + 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">Suivant &#8250;</a>
+        <a href="<?= BASE_URL ?>offres?page=<?= $page + 1 ?>&query=<?= urlencode($query) ?>&ville=<?= urlencode($ville) ?>&domaine=<?= urlencode($domaine) ?>">Suivant &#8250;</a>
     <?php endif; ?>
 
 </div>

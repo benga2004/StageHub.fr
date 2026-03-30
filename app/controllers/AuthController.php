@@ -1,5 +1,6 @@
 <?php
 class AuthController {
+    private bool $loggedIn = false;
 
     public function login(): void {
         $erreur = '';
@@ -9,6 +10,7 @@ class AuthController {
             $user = (new User())->findByEmail($email);
 
             if ($user && password_verify($password, $user['password'])) {
+                $this->loggedIn = true;
                 $_SESSION['user']        = $user;
                 $_SESSION['user_id']    = $user['id'];
                 $_SESSION['user_role']  = $user['role'];

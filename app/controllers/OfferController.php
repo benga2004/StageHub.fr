@@ -17,7 +17,7 @@
 // require "../views/offers/list.php";
 
 class OfferController {
-    private int $parPage = 9;
+    private int $parPage = 8;
 
     public function index(): void {
 

@@ -60,6 +60,13 @@ switch ($url) {
         (new AdminController())->entreprises();
         break;
     case 'offres/ajouter':
+        if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'pilote' || $_SESSION['user_role'] == 'admin')) {
+                (new OfferController())->add();
+        } else {
+            echo "<script>alert('Accès refusé : vous devez être connecté en tant que pilote ou admin pour ajouter une offre.</script>";
+            header('Location: ' . BASE_URL . 'connexion');
+            exit;
+        }
         (new OfferController())->add();
         break;
     case 'offres/ajouter/etape1':

@@ -48,8 +48,8 @@
         </div>
 
         <div class="form-group">
-            <label for="nbOfJobs">Nombre de stagiaires souhaités *</label>
-            <input type="number" id="nbOfJobs" name="nbOfJobs" value="1" min="1" required>
+            <label for="numberOfJob">Nombre de stagiaires souhaités *</label>
+            <input type="number" id="numberOfJob" name="numberOfJob" value="1" min="1" required>
         </div>
 
     </fieldset>

@@ -57,7 +57,11 @@ class PiloteController {
         }, $rows);
 
         // ── Barres de progression ──────────────────────────────────────────
-        $nbEnRecherche = count(array_filter($etudiants, fn ($e) => $e['statut'] === 'En recherche'));
+        // Ancienne syntaxe (PHP 7.4+):
+        // $nbEnRecherche = count(array_filter($etudiants, fn ($e) => $e['statut'] === 'En recherche'));
+        $nbEnRecherche = count(array_filter($etudiants, function ($e) {
+            return $e['statut'] === 'En recherche';
+        }));
         $barres = [];
         if ($nbEtudiants > 0) {
             $barres = [
@@ -80,8 +84,24 @@ class PiloteController {
         ")->fetchAll(PDO::FETCH_ASSOC);
 
         $candidatures = array_map(function ($c) {
-            $badge  = match($c['statut']) { 'acceptee' => 'badge-green', 'refusee' => 'badge-red', default => 'badge-orange' };
-            $statut = match($c['statut']) { 'acceptee' => 'Acceptée',    'refusee' => 'Refusée',   default => 'En attente'   };
+            // Ancienne syntaxe (PHP 8+):
+            // $badge  = match($c['statut']) { 'acceptee' => 'badge-green', 'refusee' => 'badge-red', default => 'badge-orange' };
+            // $statut = match($c['statut']) { 'acceptee' => 'Acceptée',    'refusee' => 'Refusée',   default => 'En attente'   };
+
+            switch ($c['statut']) {
+                case 'acceptee':
+                    $badge = 'badge-green';
+                    $statut = 'Acceptée';
+                    break;
+                case 'refusee':
+                    $badge = 'badge-red';
+                    $statut = 'Refusée';
+                    break;
+                default:
+                    $badge = 'badge-orange';
+                    $statut = 'En attente';
+            }
+
             return [
                 'initiale'   => strtoupper(mb_substr($c['prenom'], 0, 1)),
                 'nom'        => $c['prenom'] . ' ' . $c['nom'],
@@ -96,12 +116,38 @@ class PiloteController {
         // ── Activité récente ───────────────────────────────────────────────
         $activites = [];
         foreach (array_slice($candidatures, 0, 5) as $c) {
-            $dot = match($c['badge']) { 'badge-green' => '#38a169', 'badge-red' => '#fa5252', default => '#fd7e14' };
-            $txt = match($c['statut']) {
-                'Acceptée' => $c['nom'] . ' a obtenu son stage – ' . $c['entreprise'],
-                'Refusée'  => $c['nom'] . ' – candidature refusée par ' . $c['entreprise'],
-                default    => $c['nom'] . ' a postulé chez ' . $c['entreprise'],
-            };
+            // Ancienne syntaxe (PHP 8+):
+            // $dot = match($c['badge']) { 'badge-green' => '#38a169', 'badge-red' => '#fa5252', default => '#fd7e14' };
+            // $txt = match($c['statut']) {
+            //     'Acceptée' => $c['nom'] . ' a obtenu son stage – ' . $c['entreprise'],
+            //     'Refusée'  => $c['nom'] . ' – candidature refusée par ' . $c['entreprise'],
+            //     default    => $c['nom'] . ' a postulé chez ' . $c['entreprise'],
+            // };
+
+            switch ($c['badge']) {
+                case 'badge-green':
+                    $dot = '#38a169';
+                    break;
+                case 'badge-red':
+                    $dot = '#fa5252';
+                    break;
+                default:
+                    $dot = '#fd7e14';
+                    break;
+            }
+
+            switch ($c['statut']) {
+                case 'Acceptée':
+                    $txt = $c['nom'] . ' a obtenu son stage – ' . $c['entreprise'];
+                    break;
+                case 'Refusée':
+                    $txt = $c['nom'] . ' – candidature refusée par ' . $c['entreprise'];
+                    break;
+                default:
+                    $txt = $c['nom'] . ' a postulé chez ' . $c['entreprise'];
+                    break;
+            }
+
             $activites[] = ['dot' => $dot, 'icon' => 'bi-envelope-fill', 'txt' => $txt, 'time' => $c['date']];
         }
 

@@ -51,9 +51,9 @@
             <div class="field-row">
                 <input type="number" id="durationNumber" name="durationNumber" value="2" min="1" required>
                 <select id="durationPeriod" name="durationPeriod">
-                    <option value="month">Mois</option>
-                    <option value="week">Semaine(s)</option>
-                    <option value="day">Jour(s)</option>
+                    <option value="Mois">Mois</option>
+                    <option value="Semaine(s)">Semaine(s)</option>
+                    <option value="Jour(s)">Jour(s)</option>
                 </select>
             </div>
         </div>
