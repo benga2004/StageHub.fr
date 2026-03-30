@@ -89,18 +89,33 @@ switch ($url) {
         (new WishlistController())->toggle();
         break;
     case 'mentions-legales':
-        require BASE_PATH . '/app/views/mentions-legales.php';
+        echo twig_render('mentions-legales.html.twig', []);
         break;
     case 'politique-confidentialite':
-        require BASE_PATH . '/app/views/politique-confidentialite.php';
+        echo twig_render('politique-confidentialite.html.twig', []);
         break;
     case 'conditions-generales':
-        require BASE_PATH . '/app/views/conditions-generales.php';
+        echo twig_render('conditions-generales.html.twig', []);
         break;
     case 'contact':
-        require BASE_PATH . '/app/views/contact.php';
+        $succes      = false;
+        $erreurs     = [];
+        $post_nom    = $post_email = $post_sujet = $post_message = '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $post_nom     = trim($_POST['nom']     ?? '');
+            $post_email   = trim($_POST['email']   ?? '');
+            $post_sujet   = trim($_POST['sujet']   ?? '');
+            $post_message = trim($_POST['message'] ?? '');
+            if (!$post_nom) $erreurs[] = 'Votre nom est obligatoire.';
+            if (!filter_var($post_email, FILTER_VALIDATE_EMAIL)) $erreurs[] = 'Adresse email invalide.';
+            if (!$post_sujet) $erreurs[] = 'Veuillez choisir un sujet.';
+            if (strlen($post_message) < 20) $erreurs[] = 'Votre message doit faire au moins 20 caractères.';
+            if (empty($erreurs)) $succes = true;
+        }
+        echo twig_render('contact.html.twig', compact('succes', 'erreurs', 'post_nom', 'post_email', 'post_sujet', 'post_message'));
         break;
     default:
-        require '../app/views/errors/404.php';
+        http_response_code(404);
+        echo twig_render('errors/404.html.twig', []);
         break;
 }

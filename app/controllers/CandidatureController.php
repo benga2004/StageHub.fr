@@ -72,6 +72,15 @@ class CandidatureController {
             }
         }
 
-        require BASE_PATH . '/app/views/offers/candidature.php';
+        echo twig_render('offers/candidature.html.twig', [
+            'erreurs'       => $erreurs,
+            'succes'        => $succes,
+            'offre_id'      => $offre_id,
+            'user'          => $user,
+            'post_prenom'   => $_POST['prenom']  ?? '',
+            'post_nom'      => $_POST['nom']     ?? '',
+            'post_email'    => $_POST['email']   ?? '',
+            'post_lettre'   => $_POST['lettre']  ?? '',
+        ]);
     }
 }

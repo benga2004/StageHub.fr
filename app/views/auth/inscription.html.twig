@@ -1,0 +1,75 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Inscription - StageHub{% endblock %}
+
+{% block content %}
+<div class="auth-card" data-page="inscription">
+<h1>Inscription</h1>
+
+{% if erreur %}
+<div class="auth-error" role="alert">
+    <i class="fas fa-exclamation-triangle"></i>
+    {{ erreur|raw }}
+</div>
+{% endif %}
+
+<form action="" method="POST">
+    <fieldset>
+        <legend class="sr-only">Formulaire d'inscription</legend>
+
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" value="{{ post_nom|default('') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" value="{{ post_prenom|default('') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" name="telephone" value="{{ post_telephone|default('') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" value="{{ post_email|default('') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password-confirm">Confirmation de mot de passe</label>
+            <input type="password" id="password-confirm" name="password_confirm" required>
+        </div>
+
+        <div class="form-group">
+            <label>Je m'inscris en tant que</label>
+            <div class="role-choice">
+                <label class="role-option">
+                    <input type="radio" name="role" value="etudiant"
+                        {{ (post_role|default('etudiant')) == 'etudiant' ? 'checked' : '' }}>
+                    <span><i class="fas fa-graduation-cap"></i> Étudiant</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="pilote"
+                        {{ (post_role|default('')) == 'pilote' ? 'checked' : '' }}>
+                    <span><i class="fas fa-chalkboard-teacher"></i> Pilote de promo</span>
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">S'Inscrire</button>
+    </fieldset>
+
+    <div class="login-section">
+        <p>Vous avez déjà un compte ?</p>
+        <a href="{{ base_url }}connexion" class="auth-switch-link" data-direction="to-connexion">Connectez-vous</a>
+    </div>
+</form>
+</div><!-- /.auth-card -->
+{% endblock %}

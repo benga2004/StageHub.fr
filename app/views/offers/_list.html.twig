@@ -1,0 +1,86 @@
+{# Partial — no extends. Included by Accueil.html.twig and offers/list.html.twig #}
+
+<h1>Offres de stage</h1>
+
+{% if successMessage %}
+    <div class="success-message" style="margin-bottom:1rem; padding: 10px; border: 1px solid #40a84e; background:#e8f7e8; color:#2b662b; border-radius:6px;">
+        {{ successMessage }}
+    </div>
+{% endif %}
+
+<section id="search-bar" aria-label="Rechercher une offre">
+    <form action="{{ base_url }}offres" method="get" class="search-form" autocomplete="off">
+        <div class="field">
+            <label for="company-search" class="field-label">
+                <i class="fas fa-building" aria-hidden="true"></i>
+            </label>
+            <input id="company-search" class="field-input" type="search" name="query"
+                placeholder="Entreprise, profil, compétence..."
+                value="{{ query|default('') }}">
+        </div>
+
+        <div class="field">
+            <label for="city-search" class="field-label">
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            </label>
+            <input id="city-search" class="field-input" type="text" name="ville"
+                placeholder="Ville"
+                value="{{ ville|default('') }}">
+        </div>
+
+        <div class="field">
+            <label for="domain-search" class="field-label">
+                <i class="fas fa-briefcase" aria-hidden="true"></i>
+            </label>
+            <select id="domain-search" name="domaine" class="field-input">
+                <option value="">Tous les domaines</option>
+                <option value="informatique" {{ domaine|default('') == 'informatique' ? 'selected' }}>Informatique</option>
+                <option value="marketing"    {{ domaine|default('') == 'marketing'    ? 'selected' }}>Marketing</option>
+                <option value="industrie"    {{ domaine|default('') == 'industrie'    ? 'selected' }}>Industrie</option>
+                <option value="design"       {{ domaine|default('') == 'design'       ? 'selected' }}>Design</option>
+                <option value="finance"      {{ domaine|default('') == 'finance'      ? 'selected' }}>Finance</option>
+            </select>
+        </div>
+
+        <button type="submit" class="search-button">Rechercher</button>
+    </form>
+</section>
+
+<p class="info">{{ total }} offres disponibles</p>
+
+<div class="offer-cards-container">
+{% for offre in offresPage %}
+<div class="offer-card">
+    <div class="offer-card-header">
+        <h2>{{ offre.titre }}</h2>
+        {% if session.user_id %}
+            {% set inWL = offre.id in (wishlistIds|default([])) %}
+            <button class="wishlist-btn {{ inWL ? 'active' : '' }}"
+                    type="button"
+                    data-offre="{{ offre.id }}"
+                    title="{{ inWL ? 'Retirer de la wishlist' : 'Ajouter à la wishlist' }}">
+                <i class="{{ inWL ? 'fas' : 'far' }} fa-bookmark"></i>
+            </button>
+        {% endif %}
+    </div>
+
+    <p class="company">{{ offre.entreprise_nom|default('') }}</p>
+    <p>Ville : {{ offre.ville }}</p>
+    <p>Durée : {{ offre.duree }}</p>
+    <p>Domaine : {{ offre.domaine }}</p>
+
+    <a class="details-btn" href="{{ base_url }}offres/detail?id={{ offre.id }}">Détails</a>
+</div>
+{% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="{{ base_url }}offres?page={{ page - 1 }}&query={{ query|url_encode }}&ville={{ ville|url_encode }}&domaine={{ domaine|url_encode }}">&#8249; Précédent</a>
+    {% endif %}
+    {{ page }}/{{ pages }}
+    {% if page < pages %}
+        <a href="{{ base_url }}offres?page={{ page + 1 }}&query={{ query|url_encode }}&ville={{ ville|url_encode }}&domaine={{ domaine|url_encode }}">Suivant &#8250;</a>
+    {% endif %}
+</div>

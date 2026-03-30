@@ -151,6 +151,13 @@ class PiloteController {
             $activites[] = ['dot' => $dot, 'icon' => 'bi-envelope-fill', 'txt' => $txt, 'time' => $c['date']];
         }
 
-        require BASE_PATH . '/app/views/offers/dashbord_pilote.php';
+        echo twig_render('offers/dashbord_pilote.html.twig', [
+            'pilote'       => $pilote,
+            'stats'        => $stats,
+            'etudiants'    => $etudiants,
+            'barres'       => $barres,
+            'candidatures' => $candidatures,
+            'activites'    => $activites,
+        ]);
     }
 }

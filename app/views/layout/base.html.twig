@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ meta_description|default('StageHub - Trouvez votre stage idéal') }}">
+<title>{% block title %}StageHub{% endblock %}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{{ base_url }}css/style.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/inscription.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/offres.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/profil.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/ajout_offres.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/sidebar.css?v=2">
+<link rel="stylesheet" href="{{ base_url }}css/bg-animations.css?v=2">
+{% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+<!-- Arrière-plan animé -->
+<div class="bg-grid"></div>
+
+<div class="bg-rings">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="ring ring-4"></div>
+</div>
+
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="orb orb-5"></div>
+</div>
+
+<div class="bg-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+{% block page_header %}
+<header class="header">
+    <div class="logo">
+        <img src="{{ base_url }}images/Logo.png?v=2" alt="StageHub logo" class="logo-icon">
+        <span>StageHub</span>
+    </div>
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="{{ base_url }}">Accueil</a></li>
+            <li><a href="{{ base_url }}offres">Offres</a></li>
+            {% if session.user_id %}
+                {% if session.user_role == 'admin' %}
+                    <li><a href="{{ base_url }}admin"><i class="fas fa-shield-alt"></i> Administration</a></li>
+                {% elseif session.user_role == 'pilote' %}
+                    <li><a href="{{ base_url }}dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="{{ base_url }}offres/ajouter"><i class="fas fa-plus-circle"></i> Ajouter une offre</a></li>
+                {% else %}
+                    <li><a href="{{ base_url }}profil/etudiant"><i class="fas fa-user"></i> Mon Profil</a></li>
+                    <li><a href="{{ base_url }}wishlist"><i class="fas fa-bookmark"></i> Wishlist</a></li>
+                {% endif %}
+                <li>
+                    <span class="nav-username">👋 {{ session.user_prenom|default('') }}</span>
+                </li>
+                <li><a href="{{ base_url }}deconnexion" class="btn-nav-logout">Déconnexion</a></li>
+            {% else %}
+                <li><a href="{{ base_url }}inscription">Inscription</a></li>
+                <li><a href="{{ base_url }}connexion" class="btn-nav-login">Connexion</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <button class="menu-icon" id="menu-toggle" aria-label="Menu">☰</button>
+</header>
+
+<!-- Sidebar mobile -->
+<nav class="sidebar" id="mobile-menu">
+    <button class="sidebar-close" id="sidebar-close">✕</button>
+    <div class="sidebar-items">
+        <a href="{{ base_url }}"><i class="bi bi-house-door-fill"></i> Accueil</a>
+        <a href="{{ base_url }}offres"><i class="bi bi-briefcase-fill"></i> Offres</a>
+        {% if session.user_id %}
+            {% if session.user_role == 'admin' %}
+                <a href="{{ base_url }}admin"><i class="bi bi-shield-fill"></i> Administration</a>
+            {% elseif session.user_role == 'pilote' %}
+                <a href="{{ base_url }}dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a href="{{ base_url }}offres/ajouter"><i class="bi bi-plus-circle-fill"></i> Ajouter une offre</a>
+            {% else %}
+                <a href="{{ base_url }}profil/etudiant"><i class="bi bi-person-fill"></i> Mon Profil</a>
+                <a href="{{ base_url }}wishlist"><i class="bi bi-bookmark-fill"></i> Wishlist</a>
+            {% endif %}
+            <a href="{{ base_url }}deconnexion" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+        {% else %}
+            <a href="{{ base_url }}inscription"><i class="bi bi-person-plus-fill"></i> Inscription</a>
+            <a href="{{ base_url }}connexion"><i class="bi bi-lock-fill"></i> Connexion</a>
+        {% endif %}
+    </div>
+</nav>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+{% endblock %}
+
+<main class="content">
+
+{% if flash %}
+    <div class="dash-alert dash-alert--{{ flash.type == 'success' ? 'success' : 'error' }}">
+        {{ flash.message }}
+    </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>StageHub</h3>
+            <p>La plateforme de référence pour trouver votre stage idéal et connecter étudiants et entreprises.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Liens rapides</h4>
+            <ul>
+                <li><a href="{{ base_url }}">Accueil</a></li>
+                <li><a href="{{ base_url }}offres">Offres de stage</a></li>
+                <li><a href="{{ base_url }}offres/ajouter">Publier une offre (Pilote)</a></li>
+                <li><a href="{{ base_url }}inscription">S'inscrire</a></li>
+                <li><a href="{{ base_url }}connexion">Se connecter</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Mentions légales</h4>
+            <ul>
+                <li><a href="{{ base_url }}mentions-legales">Mentions légales</a></li>
+                <li><a href="{{ base_url }}politique-confidentialite">Politique de confidentialité</a></li>
+                <li><a href="{{ base_url }}conditions-generales">Conditions générales d'utilisation</a></li>
+                <li><a href="{{ base_url }}contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Suivez-nous</h4>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; {{ "now"|date("Y") }} StageHub. Tous droits réservés.</p>
+        <p>Contact : <a href="mailto:contact@stagehub.fr">contact@stagehub.fr</a> | Tél : 01 23 45 67 89</p>
+    </div>
+</footer>
+
+<script>window.BASE_URL = '{{ base_url }}';</script>
+{% block extra_js %}{% endblock %}
+<script src="{{ base_url }}js/script.js"></script>
+<script src="{{ base_url }}js/sidebar.js"></script>
+
+</body>
+</html>

@@ -12,9 +12,6 @@ class EtudiantController {
         $candidatures   = (new Candidature())->getByEtudiant($userId);
         $wishlistOffres = (new Wishlist())->getOffresByEtudiant($userId);
 
-        $title     = "Mon Profil - StageHub";
-        $extra_css = '<link rel="stylesheet" href="' . BASE_URL . 'css/profil.css?v=5">';
-
         // Traitement modification du profil
         $succes_profil = '';
         $erreur_profil = '';
@@ -71,8 +68,15 @@ class EtudiantController {
             }
         }
 
-        require BASE_PATH . '/app/views/layout/header.php';
-        require BASE_PATH . '/app/views/Profil_etudiant.php';
-        require BASE_PATH . '/app/views/layout/footer.php';
+        echo twig_render('Profil_etudiant.html.twig', [
+            'user'           => $user,
+            'candidatures'   => $candidatures,
+            'wishlistOffres' => $wishlistOffres,
+            'succes_profil'  => $succes_profil,
+            'erreur_profil'  => $erreur_profil,
+            'post_prenom'    => $_POST['prenom'] ?? '',
+            'post_nom'       => $_POST['nom']    ?? '',
+            'post_email'     => $_POST['email']  ?? '',
+        ]);
     }
 }

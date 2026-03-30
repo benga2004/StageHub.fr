@@ -24,12 +24,14 @@ class AuthController {
                 }
                 exit;
             } else {
-            $erreur = 'Email ou mot de passe incorrect.';
-            echo $erreur;
+                $erreur = 'Email ou mot de passe incorrect.';
             }
 
         }
-        require BASE_PATH . '/app/views/auth/connexion.php';
+        echo twig_render('auth/connexion.html.twig', [
+            'erreur'     => $erreur,
+            'post_email' => $_POST['email'] ?? '',
+        ]);
     }
 
     public function logout(): void {
@@ -75,8 +77,13 @@ class AuthController {
             }
         }
 
-        include BASE_PATH . '/app/views/layout/header.php';
-        require BASE_PATH . '/app/views/auth/inscription.php';
-        include BASE_PATH . '/app/views/layout/footer.php';
+        echo twig_render('auth/inscription.html.twig', [
+            'erreur'         => $erreur,
+            'post_nom'       => $_POST['nom']       ?? '',
+            'post_prenom'    => $_POST['prenom']    ?? '',
+            'post_telephone' => $_POST['telephone'] ?? '',
+            'post_email'     => $_POST['email']     ?? '',
+            'post_role'      => $_POST['role']      ?? 'etudiant',
+        ]);
     }
 }

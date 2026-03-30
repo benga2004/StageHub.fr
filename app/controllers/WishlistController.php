@@ -37,12 +37,8 @@ class WishlistController {
             exit;
         }
 
-        $title   = "Ma Wishlist - StageHub";
-        $content = "Vos offres de stage sauvegardées";
         $offres  = (new Wishlist())->getOffresByEtudiant((int)$_SESSION['user_id']);
 
-        require BASE_PATH . '/app/views/layout/header.php';
-        require BASE_PATH . '/app/views/wishlist.php';
-        require BASE_PATH . '/app/views/layout/footer.php';
+        echo twig_render('wishlist.html.twig', ['offres' => $offres]);
     }
 }

@@ -1,9 +1,8 @@
-<?php
-$title   = "Politique de confidentialité - StageHub";
-$content = "Politique de confidentialité et protection des données personnelles de StageHub";
-require __DIR__ . '/layout/header.php';
-?>
+{% extends 'layout/base.html.twig' %}
 
+{% block title %}Politique de confidentialité - StageHub{% endblock %}
+
+{% block content %}
 <div class="legal-page">
 
     <div class="legal-hero">
@@ -66,7 +65,7 @@ require __DIR__ . '/layout/header.php';
                 <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré.</li>
                 <li><strong>Droit d'opposition</strong> : vous opposer à certains traitements.</li>
             </ul>
-            <p>Pour exercer ces droits : <a href="mailto:privacy@stagehub.fr">privacy@stagehub.fr</a> ou via notre <a href="<?= BASE_URL ?>contact">formulaire de contact</a>. Réponse sous 30 jours.</p>
+            <p>Pour exercer ces droits : <a href="mailto:privacy@stagehub.fr">privacy@stagehub.fr</a> ou via notre <a href="{{ base_url }}contact">formulaire de contact</a>. Réponse sous 30 jours.</p>
             <p>Vous pouvez également introduire une réclamation auprès de la <strong>CNIL</strong> : <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>.</p>
         </section>
 
@@ -79,5 +78,4 @@ require __DIR__ . '/layout/header.php';
 
     </div>
 </div>
-
-<?php require __DIR__ . '/layout/footer.php'; ?>
+{% endblock %}

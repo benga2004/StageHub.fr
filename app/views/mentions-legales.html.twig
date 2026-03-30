@@ -1,9 +1,8 @@
-<?php
-$title   = "Mentions légales - StageHub";
-$content = "Mentions légales de la plateforme StageHub";
-require __DIR__ . '/layout/header.php';
-?>
+{% extends 'layout/base.html.twig' %}
 
+{% block title %}Mentions légales - StageHub{% endblock %}
+
+{% block content %}
 <div class="legal-page">
 
     <div class="legal-hero">
@@ -48,7 +47,7 @@ require __DIR__ . '/layout/header.php';
             <h2><i class="fas fa-shield-alt"></i> Données personnelles</h2>
             <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification, de portabilité et d'effacement de vos données personnelles.</p>
             <p>Pour exercer ces droits, contactez-nous à <a href="mailto:privacy@stagehub.fr">privacy@stagehub.fr</a>.</p>
-            <p>Pour plus d'informations, consultez notre <a href="<?= BASE_URL ?>politique-confidentialite">Politique de confidentialité</a>.</p>
+            <p>Pour plus d'informations, consultez notre <a href="{{ base_url }}politique-confidentialite">Politique de confidentialité</a>.</p>
         </section>
 
         <section class="legal-section">
@@ -65,5 +64,4 @@ require __DIR__ . '/layout/header.php';
 
     </div>
 </div>
-
-<?php require __DIR__ . '/layout/footer.php'; ?>
+{% endblock %}

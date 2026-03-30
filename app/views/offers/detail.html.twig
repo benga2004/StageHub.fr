@@ -1,0 +1,71 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Détails de l'offre - StageHub.fr{% endblock %}
+
+{% block content %}
+<div class="offer-detail container">
+    <a class="back-link" href="{{ base_url }}offres">← Retour aux offres</a>
+
+    <section class="offer-hero">
+        <div>
+            <h1>{{ offre.titre }}</h1>
+            <h2>{{ company.nom }}</h2>
+            <p class="meta-date">Publié le {{ offre.date_offre }}</p>
+        </div>
+        <a class="cta-btn" href="{{ base_url }}candidature?id={{ id }}">Postuler</a>
+    </section>
+
+    <section class="offer-meta">
+        <div>
+            <span>Ville</span>
+            <strong>{{ offre.ville }}</strong>
+        </div>
+        <div>
+            <span>Durée</span>
+            <strong>{{ offre.duree ? offre.duree : '—' }}</strong>
+        </div>
+        <div>
+            <span>Domaine</span>
+            <strong>{{ offre.domaine }}</strong>
+        </div>
+        <div>
+            <span>Rémunération</span>
+            <strong>{{ offre.remuneration }}€ par {{ offre.r_period }}</strong>
+        </div>
+    </section>
+
+    <section class="offer-section">
+        <h3>Description</h3>
+        <p>{{ offre.description|nl2br }}</p>
+    </section>
+
+    {% if offre.avantages %}
+        {% set avantagesLabels = {
+            'transport':     'Prise en charge du transport quotidien',
+            'interessement': 'Intéressement et participation',
+            'cantine':       'Accès à une cantine ou tickets restaurant',
+            'rtt':           'RTT',
+            'flextime':      'Flextime',
+            'vehicule':      'Véhicule de fonction'
+        } %}
+        {% set avantagesList = offre.avantages|split(',') %}
+        {% if avantagesList|join('')|trim %}
+        <section class="offer-section">
+            <h3>Avantages</h3>
+            <div class="avantages">
+                {% for avantage in avantagesList %}
+                    {% set key = avantage|trim %}
+                    {% if key %}
+                        <span class="badge">{{ avantagesLabels[key]|default(key) }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    {% endif %}
+
+    <section class="offer-actions">
+        <a class="cta-btn cta-btn--wide" href="{{ base_url }}candidature?id={{ id }}">Postuler maintenant</a>
+    </section>
+</div>
+{% endblock %}
