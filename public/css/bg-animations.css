@@ -1,297 +1,94 @@
-/* ============================================
-   BACKGROUND ANIMATIONS — INSPIRANT & PRO
-   ============================================ */
+/* Background animation inspired by the radial particle SCSS effect. */
 
-/* Gradient animé sur le body */
+:root {
+    --thing-size: 5px;
+    --thing-duration: 6s;
+}
+
 body {
-    background: #ffffff;
-    background-size: auto;
-    animation: none;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at center, rgba(42, 42, 42, 0.35) 0%, rgba(0, 0, 0, 0) 28%),
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 38%),
+        #000000;
     position: relative;
     overflow-x: hidden;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 35%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+}
+
 .bg-grid,
 .bg-rings,
-.bg-orbs,
-.bg-particles {
+.bg-orbs {
     display: none;
 }
 
-@keyframes bgGradient {
-    0%   { background-position: 0%   50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0%   50%; }
-}
-
-/* ============================================
-   ORBES LUMINEUX FLOTTANTS
-   ============================================ */
-
-.bg-orbs {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.12;
-}
-
-.orb-1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #84c5f4, transparent 70%);
-    top: -100px;
-    left: -100px;
-    animation: orbFloat1 18s ease-in-out infinite;
-}
-
-.orb-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, #66a8d8, transparent 70%);
-    top: 40%;
-    right: -80px;
-    animation: orbFloat2 22s ease-in-out infinite;
-}
-
-.orb-3 {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, #f2d3a4, transparent 70%);
-    bottom: 10%;
-    left: 20%;
-    animation: orbFloat3 16s ease-in-out infinite;
-}
-
-.orb-4 {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, #7ebfe4, transparent 70%);
-    top: 60%;
-    left: 60%;
-    animation: orbFloat4 20s ease-in-out infinite;
-}
-
-.orb-5 {
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, #bfd8e7, transparent 70%);
-    top: 20%;
-    left: 50%;
-    animation: orbFloat5 25s ease-in-out infinite;
-}
-
-@keyframes orbFloat1 {
-    0%   { transform: translate(0,   0)   scale(1);    }
-    33%  { transform: translate(80px, 60px) scale(1.1); }
-    66%  { transform: translate(-40px, 100px) scale(0.95); }
-    100% { transform: translate(0,   0)   scale(1);    }
-}
-
-@keyframes orbFloat2 {
-    0%   { transform: translate(0,   0)    scale(1);    }
-    33%  { transform: translate(-70px, 80px) scale(1.05); }
-    66%  { transform: translate(50px, -60px) scale(0.9);  }
-    100% { transform: translate(0,   0)    scale(1);    }
-}
-
-@keyframes orbFloat3 {
-    0%   { transform: translate(0,   0)    scale(1);    }
-    50%  { transform: translate(100px, -80px) scale(1.15); }
-    100% { transform: translate(0,   0)    scale(1);    }
-}
-
-@keyframes orbFloat4 {
-    0%   { transform: translate(0, 0)       scale(1);   }
-    25%  { transform: translate(-60px, 40px) scale(1.1); }
-    75%  { transform: translate(40px, -70px) scale(0.9); }
-    100% { transform: translate(0, 0)       scale(1);   }
-}
-
-@keyframes orbFloat5 {
-    0%   { transform: translate(0, 0)         scale(1);    }
-    33%  { transform: translate(90px, -50px)  scale(1.05); }
-    66%  { transform: translate(-80px, 80px)  scale(0.95); }
-    100% { transform: translate(0, 0)         scale(1);    }
-}
-
-/* ============================================
-   PARTICULES — ÉTOILES FLOTTANTES
-   ============================================ */
-
 .bg-particles {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
+    perspective: 960px;
+    transform-style: preserve-3d;
+}
+
+.bg-particles::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 22%, rgba(255, 255, 255, 0) 55%);
+    opacity: 0.6;
 }
 
 .particle {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--thing-size);
+    height: var(--thing-size);
+    margin-top: calc(var(--thing-size) / -2);
+    margin-left: calc(var(--thing-size) / -2);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.85);
-    animation: particleRise linear infinite;
-    opacity: 0;
+    background: currentColor;
+    color: hsl(calc(var(--i, 1) * -1deg), 100%, 50%);
+    opacity: 0.92;
+    will-change: transform, color;
+    animation: thingMotion var(--thing-duration) ease-in infinite alternate;
+    animation-delay: calc(var(--i, 1) * 0.005s);
+    transform:
+        rotateZ(calc(var(--i, 1) * 45deg))
+        perspective(calc(var(--thing-size) * 8))
+        translate3d(
+            calc(var(--i, 1) * 1px),
+            calc(var(--i, 1) * 1px),
+            calc(var(--i, 1) * -0.075px)
+        );
 }
 
-.particle:nth-child(1)  { width: 3px;  height: 3px;  left: 10%;  animation-duration: 14s; animation-delay: 0s;   }
-.particle:nth-child(2)  { width: 2px;  height: 2px;  left: 20%;  animation-duration: 18s; animation-delay: 2s;   }
-.particle:nth-child(3)  { width: 4px;  height: 4px;  left: 30%;  animation-duration: 12s; animation-delay: 4s;   }
-.particle:nth-child(4)  { width: 2px;  height: 2px;  left: 45%;  animation-duration: 20s; animation-delay: 1s;   }
-.particle:nth-child(5)  { width: 3px;  height: 3px;  left: 55%;  animation-duration: 16s; animation-delay: 3s;   }
-.particle:nth-child(6)  { width: 2px;  height: 2px;  left: 65%;  animation-duration: 22s; animation-delay: 5s;   }
-.particle:nth-child(7)  { width: 4px;  height: 4px;  left: 75%;  animation-duration: 13s; animation-delay: 0.5s; }
-.particle:nth-child(8)  { width: 2px;  height: 2px;  left: 85%;  animation-duration: 17s; animation-delay: 2.5s; }
-.particle:nth-child(9)  { width: 3px;  height: 3px;  left: 5%;   animation-duration: 19s; animation-delay: 6s;   }
-.particle:nth-child(10) { width: 2px;  height: 2px;  left: 92%;  animation-duration: 15s; animation-delay: 1.5s; }
-.particle:nth-child(11) { width: 3px;  height: 3px;  left: 38%;  animation-duration: 21s; animation-delay: 3.5s; }
-.particle:nth-child(12) { width: 2px;  height: 2px;  left: 60%;  animation-duration: 11s; animation-delay: 7s;   }
-
-@keyframes particleRise {
-    0%   { bottom: -10px; opacity: 0;    transform: translateX(0) scale(1);    }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.3; }
-    100% { bottom: 110%;  opacity: 0;    transform: translateX(60px) scale(0.5); }
-}
-
-/* ============================================
-   LIGNES GRID SUBTILES (STYLE TECH)
-   ============================================ */
-
-.bg-grid {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-        linear-gradient(rgba(84, 125, 152, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(84, 125, 152, 0.08) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: gridMove 30s linear infinite;
-}
-
-/* Ligne d'horizon légère pour un rendu marin discret */
-.bg-grid::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12vh;
-    height: 2px;
-    background: linear-gradient(90deg, transparent 0%, rgba(58, 117, 151, 0.22) 50%, transparent 100%);
-}
-
-@keyframes gridMove {
-    0%   { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
-
-/* ============================================
-   CERCLES DÉCORATIFS
-   ============================================ */
-
-.bg-rings {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-/* Bateau décoratif stylisé */
-.bg-rings::before {
-    content: '';
-    position: absolute;
-    right: 8%;
-    bottom: 10vh;
-    width: 140px;
-    height: 32px;
-    background: linear-gradient(180deg, rgba(28, 90, 125, 0.85), rgba(12, 56, 85, 0.9));
-    clip-path: polygon(6% 72%, 18% 45%, 94% 45%, 84% 78%, 18% 86%);
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 10px 20px rgba(26, 81, 112, 0.22);
-}
-
-.bg-rings::after {
-    content: '';
-    position: absolute;
-    right: 11.8%;
-    bottom: calc(10vh + 24px);
-    width: 52px;
-    height: 76px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(225, 241, 250, 0.9));
-    clip-path: polygon(8% 100%, 95% 100%, 38% 0%);
-    border: 1px solid rgba(58, 117, 151, 0.32);
-    filter: drop-shadow(0 4px 6px rgba(28, 90, 125, 0.2));
-}
-
-.ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(66, 103, 128, 0.12);
-    animation: ringPulse ease-in-out infinite;
-}
-
-.ring-1 {
-    width: 600px; height: 600px;
-    top: -200px;  left: -200px;
-    animation-duration: 10s;
-    animation-delay: 0s;
-}
-
-.ring-2 {
-    width: 400px; height: 400px;
-    top: -100px;  left: -100px;
-    animation-duration: 10s;
-    animation-delay: 1.5s;
-}
-
-.ring-3 {
-    width: 800px; height: 800px;
-    bottom: -300px; right: -300px;
-    animation-duration: 14s;
-    animation-delay: 0s;
-}
-
-.ring-4 {
-    width: 500px; height: 500px;
-    bottom: -150px; right: -150px;
-    animation-duration: 14s;
-    animation-delay: 2s;
-}
-
-@keyframes ringPulse {
-    0%, 100% { transform: scale(1);    opacity: 0.18; }
-    50%       { transform: scale(1.08); opacity: 0.32; }
-}
-
-@media (max-width: 768px) {
-    .bg-rings::before {
-        right: 5%;
-        width: 110px;
-        height: 26px;
-        bottom: 8vh;
-    }
-
-    .bg-rings::after {
-        right: 10.5%;
-        width: 42px;
-        height: 62px;
-        bottom: calc(8vh + 19px);
+@keyframes thingMotion {
+    100% {
+        color: hsl(calc(var(--i, 1) * 1deg), 100%, 70%);
+        transform:
+            rotateZ(calc(var(--i, 1) * 90deg))
+            rotateX(calc(var(--i, 1) * 1deg))
+            perspective(calc(var(--thing-size) * 3))
+            translate3d(
+                calc(var(--i, 1) * -3px),
+                calc(var(--i, 1) * 2px),
+                calc(var(--i, 1) * -0.075px)
+            );
     }
 }
-
-/* ============================================
-   TOUT LE CONTENU AU-DESSUS DU FOND
-   ============================================ */
 
 header.header,
 main.content,
@@ -300,12 +97,10 @@ main.content,
     z-index: 1;
 }
 
-/* Adapter les couleurs du contenu sur fond sombre */
 main.content {
     background: transparent;
 }
 
-/* Cards sur fond sombre → légère translucidité */
 .feature-card,
 .home-cta,
 .home-stats {
@@ -321,7 +116,6 @@ main.content {
     background: rgba(255, 255, 255, 0.9);
 }
 
-/* Hero sur fond clair */
 .home-hero {
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid rgba(126, 170, 199, 0.35);
@@ -337,9 +131,25 @@ main.content {
     color: #335f79;
 }
 
-/* Footer légèrement transparent */
 .footer {
     background: rgba(13, 54, 79, 0.88);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(183, 216, 235, 0.4);
+}
+
+@media (max-width: 768px) {
+    :root {
+        --thing-size: 4px;
+    }
+
+    .particle:nth-child(2n) {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .particle {
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+    }
 }

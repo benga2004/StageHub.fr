@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="<?= BASE_URL ?>css/profil.css?v=2">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/ajout_offres.css?v=2">
 <link rel="stylesheet" href="<?= BASE_URL ?>css/sidebar.css?v=2">
-<link rel="stylesheet" href="<?= BASE_URL ?>css/bg-animations.css?v=2">
+<link rel="stylesheet" href="<?= BASE_URL ?>css/bg-animations.css?v=3">
 
 <?php if (!empty($extra_css)) echo $extra_css; ?>
 
@@ -47,18 +47,9 @@
 </div>
 
 <div class="bg-particles">
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
+    <?php for ($i = 1; $i <= 360; $i++): ?>
+        <div class="particle" style="--i: <?= $i ?>;"></div>
+    <?php endfor; ?>
 </div>
 
 <?php if (!empty($custom_header)): ?>

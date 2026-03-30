@@ -1,121 +1,142 @@
 <?php
 
-$title      = "Dashboard Admin - StageHub";
-$extra_css  = '<link rel="stylesheet" href="' . BASE_URL . 'css/admin.css?v=2">';
+$title = 'Dashboard Admin - StageHub';
+$extra_css = '<link rel="stylesheet" href="' . BASE_URL . 'css/admin.css?v=3">';
 
-$custom_header = '
-<header class="header">
-    <div class="header-logo">
-        <div class="header-logo-icon">S</div>
-        StageHub
-    </div>
-    <div class="header-right">
-        <div class="header-user">
-            <div>Admin</div>
-            <span class="role-badge">Administrateur</span>
-        </div>
-        <button class="btn-logout">&#x23FB;</button>
-    </div>
-</header>';
-
-require_once '../../app/views/layout/header.php';
-
+require BASE_PATH . '/app/views/layout/header.php';
 ?>
 
-            <!-- Bannière de bienvenue -->
-            <div class="welcome-banner">
-                <h2>Bonjour, Admin &#128075;</h2>
-                <p>Voici un aperçu de votre plateforme</p>
+<section class="admin-dashboard">
+    <div class="admin-hero">
+        <div>
+            <span class="admin-kicker">Espace administration</span>
+            <h1>Bonjour, <?= htmlspecialchars($adminName, ENT_QUOTES, 'UTF-8') ?></h1>
+            <p>Voici l'etat actuel de la plateforme et les points d'entree utiles pour l'administration.</p>
+        </div>
+        <div class="admin-hero-actions">
+            <a href="<?= BASE_URL ?>admin/entreprises" class="admin-btn admin-btn-primary">
+                <i class="bi bi-buildings-fill"></i>
+                Gerer les entreprises
+            </a>
+            <a href="<?= BASE_URL ?>offres" class="admin-btn admin-btn-secondary">
+                <i class="bi bi-briefcase-fill"></i>
+                Voir les offres
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-stats-grid">
+        <?php foreach ($stats as $stat): ?>
+            <article class="admin-stat-card">
+                <div class="admin-stat-icon">
+                    <i class="<?= htmlspecialchars($stat['icon'], ENT_QUOTES, 'UTF-8') ?>"></i>
+                </div>
+                <div class="admin-stat-value"><?= (int) $stat['value'] ?></div>
+                <div class="admin-stat-label"><?= htmlspecialchars($stat['label'], ENT_QUOTES, 'UTF-8') ?></div>
+                <p class="admin-stat-detail"><?= htmlspecialchars($stat['detail'], ENT_QUOTES, 'UTF-8') ?></p>
+            </article>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="admin-grid">
+        <section class="admin-panel">
+            <div class="admin-panel-head">
+                <div>
+                    <span class="admin-panel-kicker">Modules</span>
+                    <h2>Acces rapides</h2>
+                </div>
             </div>
 
-            <!-- Statistiques -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">&#127970;</div>
-                    <div class="stat-number">24</div>
-                    <div class="stat-label">Entreprises</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">&#128203;</div>
-                    <div class="stat-number">156</div>
-                    <div class="stat-label">Offres</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">&#127891;</div>
-                    <div class="stat-number">89</div>
-                    <div class="stat-label">Étudiants</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">&#128232;</div>
-                    <div class="stat-number">342</div>
-                    <div class="stat-label">Candidatures</div>
+            <div class="admin-modules-grid">
+                <?php foreach ($modules as $module): ?>
+                    <?php if ($module['is_active']): ?>
+                        <a href="<?= htmlspecialchars($module['href'], ENT_QUOTES, 'UTF-8') ?>" class="admin-module-card">
+                            <div class="admin-module-icon"><i class="<?= htmlspecialchars($module['icon'], ENT_QUOTES, 'UTF-8') ?>"></i></div>
+                            <div class="admin-module-body">
+                                <div class="admin-module-topline">
+                                    <h3><?= htmlspecialchars($module['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                    <span class="admin-module-count"><?= (int) $module['count'] ?></span>
+                                </div>
+                                <p><?= htmlspecialchars($module['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                                <span class="admin-module-status"><?= htmlspecialchars($module['status'], ENT_QUOTES, 'UTF-8') ?></span>
+                            </div>
+                        </a>
+                    <?php else: ?>
+                        <div class="admin-module-card admin-module-card-disabled" aria-disabled="true">
+                            <div class="admin-module-icon"><i class="<?= htmlspecialchars($module['icon'], ENT_QUOTES, 'UTF-8') ?>"></i></div>
+                            <div class="admin-module-body">
+                                <div class="admin-module-topline">
+                                    <h3><?= htmlspecialchars($module['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                    <span class="admin-module-count"><?= (int) $module['count'] ?></span>
+                                </div>
+                                <p><?= htmlspecialchars($module['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                                <span class="admin-module-status admin-module-status-muted"><?= htmlspecialchars($module['status'], ENT_QUOTES, 'UTF-8') ?></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
+        <section class="admin-panel">
+            <div class="admin-panel-head">
+                <div>
+                    <span class="admin-panel-kicker">Comptes</span>
+                    <h2>Repartition</h2>
                 </div>
             </div>
 
-            <!-- Modules -->
-            <div class="section-title">Gestion des modules</div>
-            <div class="modules-list">
-
-                <a href="entreprises/" class="module-card">
-                    <div class="module-icon-wrap">&#127970;</div>
-                    <div class="module-info">
-                        <div class="module-name">Entreprises</div>
-                        <div class="module-desc">Ajouter, modifier, supprimer</div>
+            <div class="admin-summary-list">
+                <?php foreach ($accountSummary as $item): ?>
+                    <div class="admin-summary-row">
+                        <div class="admin-summary-label-wrap">
+                            <span class="admin-summary-dot <?= htmlspecialchars($item['tone'], ENT_QUOTES, 'UTF-8') ?>"></span>
+                            <span class="admin-summary-label"><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
+                        </div>
+                        <strong><?= (int) $item['value'] ?></strong>
                     </div>
-                    <span class="module-badge">24</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
-                <a href="offres/" class="module-card">
-                    <div class="module-icon-wrap">&#128203;</div>
-                    <div class="module-info">
-                        <div class="module-name">Offres de Stage</div>
-                        <div class="module-desc">Gérer les offres proposées</div>
-                    </div>
-                    <span class="module-badge">156</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
-                <a href="pilotes/" class="module-card">
-                    <div class="module-icon-wrap">&#128084;</div>
-                    <div class="module-info">
-                        <div class="module-name">Pilotes</div>
-                        <div class="module-desc">Gestion des managers</div>
-                    </div>
-                    <span class="module-badge">8</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
-                <a href="etudiants/" class="module-card">
-                    <div class="module-icon-wrap">&#127891;</div>
-                    <div class="module-info">
-                        <div class="module-name">Étudiants</div>
-                        <div class="module-desc">Gérer les profils</div>
-                    </div>
-                    <span class="module-badge">89</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
-                <a href="candidatures/" class="module-card">
-                    <div class="module-icon-wrap">&#128232;</div>
-                    <div class="module-info">
-                        <div class="module-name">Candidatures</div>
-                        <div class="module-desc">Suivi des candidatures</div>
-                    </div>
-                    <span class="module-badge">342</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
-                <a href="wishlist/" class="module-card">
-                    <div class="module-icon-wrap">&#11088;</div>
-                    <div class="module-info">
-                        <div class="module-name">Wish-list</div>
-                        <div class="module-desc">Favoris des étudiants</div>
-                    </div>
-                    <span class="module-badge">234</span>
-                    <span class="module-arrow">&#8250;</span>
-                </a>
-
+                <?php endforeach; ?>
             </div>
+        </section>
+    </div>
 
-<?php require_once '../../app/views/layout/footer.php'; ?>
+    <section class="admin-panel">
+        <div class="admin-panel-head">
+            <div>
+                <span class="admin-panel-kicker">Utilisateurs</span>
+                <h2>Derniers comptes</h2>
+            </div>
+        </div>
+
+        <?php if (empty($recentUsers)): ?>
+            <p class="admin-empty">Aucun compte trouve.</p>
+        <?php else: ?>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($recentUsers as $user): ?>
+                            <tr>
+                                <td><?= htmlspecialchars(trim(($user['prenom'] ?? '') . ' ' . ($user['nom'] ?? '')), ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($user['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td>
+                                    <span class="admin-role-pill admin-role-<?= htmlspecialchars($user['role'] ?? 'etudiant', ENT_QUOTES, 'UTF-8') ?>">
+                                        <?= htmlspecialchars(ucfirst($user['role'] ?? 'etudiant'), ENT_QUOTES, 'UTF-8') ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </section>
+</section>
+
+<?php require BASE_PATH . '/app/views/layout/footer.php'; ?>
