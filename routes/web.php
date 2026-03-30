@@ -71,7 +71,6 @@ switch ($url) {
             header('Location: ' . BASE_URL . 'connexion');
             exit;
         }
-        (new OfferController())->add();
         break;
     case 'offres/ajouter/etape1':
         (new OfferController())->addStep1();

@@ -3,6 +3,8 @@
 
 <h1>Nouvelle offre de stage</h1>
 
+<?php $companies = (new Company())->getAll(); ?>
+
 <form action="<?= BASE_URL ?>offres/ajouter" method="POST">
 
     <fieldset>
@@ -27,7 +29,12 @@
 
         <div class="form-group">
             <label for="enterpriseNameSearch">Nom de l'entreprise *</label>
-            <input type="text" id="enterpriseNameSearch" name="enterpriseNameSearch" placeholder="Ex: Airbus" require>
+            <input type="text" id="enterpriseNameSearch" name="enterpriseNameSearch" list="enterpriseList" placeholder="Ex: Airbus" required>
+            <datalist id="enterpriseList">
+                <?php foreach ($companies as $company): ?>
+                    <option value="<?= htmlspecialchars($company['nom']) ?>"></option>
+                <?php endforeach; ?>
+            </datalist>
         </div>
 
         <button type="submit" class="btn-submit">Continuer</button>
