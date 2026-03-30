@@ -126,3 +126,10 @@
 <?php endif; ?>
 
 <main class="content">
+
+<?php if (!empty($_SESSION['flash'])): ?>
+    <?php $flash = $_SESSION['flash']; unset($_SESSION['flash']); ?>
+    <div class="dash-alert dash-alert--<?= ($flash['type'] === 'success' ? 'success' : 'error') ?>">
+        <?= htmlspecialchars($flash['message']) ?>
+    </div>
+<?php endif; ?>

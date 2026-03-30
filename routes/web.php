@@ -63,7 +63,11 @@ switch ($url) {
         if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'pilote' || $_SESSION['user_role'] == 'admin')) {
                 (new OfferController())->add();
         } else {
-            echo "<script>alert('Accès refusé : vous devez être connecté en tant que pilote ou admin pour ajouter une offre.</script>";
+            // Ajout d’un message de type flash pour affichage via CSS côté page
+            $_SESSION['flash'] = [
+                'type' => 'error',
+                'message' => 'Accès refusé : vous devez être connecté en tant que pilote ou admin pour ajouter une offre.'
+            ];
             header('Location: ' . BASE_URL . 'connexion');
             exit;
         }
