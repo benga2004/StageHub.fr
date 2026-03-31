@@ -11,13 +11,13 @@
     <div class="admin-hero">
         <div>
             <span class="admin-kicker">Espace administration</span>
-            <h1>Bonjour, {{ adminName }} 👋</h1>
-            <p>Voici l'état actuel de la plateforme et les points d'entrée utiles pour l'administration.</p>
+            <h1>Bonjour, {{ adminName }}</h1>
+            <p>Voici l'etat actuel de la plateforme et les points d'entree utiles pour l'administration.</p>
         </div>
         <div class="admin-hero-actions">
             <a href="{{ base_url }}admin/entreprises" class="admin-btn admin-btn-primary">
                 <i class="bi bi-buildings-fill"></i>
-                Gérer les entreprises
+                Gerer les entreprises
             </a>
             <a href="{{ base_url }}admin/etudiants" class="admin-btn admin-btn-primary">
                 <i class="bi bi-mortarboard-fill"></i>
@@ -46,7 +46,7 @@
             <div class="admin-panel-head">
                 <div>
                     <span class="admin-panel-kicker">Modules</span>
-                    <h2>Accès rapides</h2>
+                    <h2>Acces rapides</h2>
                 </div>
             </div>
             <div class="admin-modules-grid">
@@ -84,7 +84,7 @@
             <div class="admin-panel-head">
                 <div>
                     <span class="admin-panel-kicker">Comptes</span>
-                    <h2>Répartition</h2>
+                    <h2>Repartition</h2>
                 </div>
             </div>
             <div class="admin-summary-list">
@@ -109,7 +109,7 @@
             </div>
         </div>
         {% if recentUsers is empty %}
-            <p class="admin-empty">Aucun compte trouvé.</p>
+            <p class="admin-empty">Aucun compte trouve.</p>
         {% else %}
         <div class="admin-table-wrap">
             <table class="admin-table">
@@ -117,7 +117,7 @@
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Rôle</th>
+                        <th>Role</th>
                     </tr>
                 </thead>
                 <tbody>
