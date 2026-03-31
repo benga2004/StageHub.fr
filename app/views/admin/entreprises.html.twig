@@ -3,32 +3,17 @@
 {% block title %}Administration des entreprises - StageHub{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=3">
+<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=4">
 {% endblock %}
 
-{% block page_header %}
-<header class="header">
-    <div class="header-logo">
-        <div class="header-logo-icon">S</div>
-        StageHub
-    </div>
-    <div class="header-right">
-        <div class="header-user">
-            <div>{{ session.user_prenom ?? 'Admin' }}</div>
-            <span class="role-badge">Administrateur</span>
-        </div>
-        <a href="{{ base_url }}deconnexion" class="btn-logout">&#x23FB;</a>
-    </div>
-</header>
-{% endblock %}
 
 {% block content %}
 <section class="admin-dashboard">
     <div class="admin-hero admin-hero-compact">
         <div>
             <span class="admin-kicker">Administration</span>
-            <h1>Entreprises</h1>
-            <p>{{ entreprises|length }} entreprise(s) référencée(s) sur la plateforme.</p>
+            <h1>Gestion des entreprises</h1>
+            <p>Recherche multi-criteres, creation, modification, suppression et consultation des offres associees.</p>
         </div>
         <div class="admin-hero-actions">
             <a href="{{ base_url }}admin" class="admin-btn admin-btn-secondary">
@@ -38,41 +23,255 @@
         </div>
     </div>
 
+    {% if enterpriseFlash %}
+        <div class="admin-flash admin-flash-{{ enterpriseFlash.type == 'success' ? 'success' : 'error' }}">
+            {{ enterpriseFlash.message }}
+        </div>
+    {% endif %}
+
+    <div class="company-admin-layout">
+        <section class="admin-panel">
+            <div class="admin-panel-head">
+                <div>
+                    <h2>Rechercher et afficher une entreprise</h2>
+                </div>
+            </div>
+
+            <form method="get" action="{{ base_url }}admin/entreprises" class="admin-search-form">
+                <div class="admin-search-grid">
+                    <div class="admin-field admin-field-wide">
+                        <label for="search-q">Recherche libre</label>
+                        <input
+                            type="text"
+                            id="search-q"
+                            name="q"
+                            class="admin-input"
+                            value="{{ filters.q|default('') }}"
+                            placeholder="Nom, description, email, telephone..."
+                        >
+                    </div>
+                    <div class="admin-field">
+                        <label for="search-ville">Ville</label>
+                        <select id="search-ville" name="ville" class="admin-select">
+                            <option value="">Toutes</option>
+                            {% for ville in villes %}
+                                <option value="{{ ville }}" {{ filters.ville == ville ? 'selected' : '' }}>{{ ville }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="admin-field">
+                        <label for="search-secteur">Secteur</label>
+                        <select id="search-secteur" name="secteur" class="admin-select">
+                            <option value="">Tous</option>
+                            {% for secteur in secteurs %}
+                                <option value="{{ secteur }}" {{ filters.secteur == secteur ? 'selected' : '' }}>{{ secteur }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-btn admin-btn-primary">
+                        <i class="bi bi-search"></i>
+                        Rechercher
+                    </button>
+                    <a href="{{ base_url }}admin/entreprises" class="admin-btn admin-btn-muted">Reinitialiser</a>
+                </div>
+            </form>
+
+            {% if entreprises is empty %}
+                <p class="admin-empty">Aucune entreprise ne correspond a la recherche.</p>
+            {% else %}
+                <div class="admin-table-wrap">
+                    <table class="admin-table admin-table-companies">
+                        <thead>
+                            <tr>
+                                <th>Entreprise</th>
+                                <th>Contact</th>
+                                <th>Stagiaires</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entreprise in entreprises %}
+                                <tr class="{{ entreprise.id == selectedCompanyId ? 'is-active' : '' }}">
+                                    <td>
+                                        <strong>{{ entreprise.nom }}</strong>
+                                        <div class="admin-table-subline">{{ entreprise.ville|default('-') }} &middot; {{ entreprise.secteur|default('-') }}</div>
+                                    </td>
+                                    <td>
+                                        <div>{{ entreprise.email|default('-') }}</div>
+                                        <div class="admin-table-subline">{{ entreprise.telephone|default('-') }}</div>
+                                    </td>
+                                    <td>{{ entreprise.applicant_count|default(0) }}</td>
+                                    <td>
+                                        <div class="admin-inline-actions">
+                                            <a href="{{ base_url }}admin/entreprises?entreprise={{ entreprise.id }}" class="admin-inline-btn">Voir</a>
+                                            <a href="{{ base_url }}admin/entreprises?entreprise={{ entreprise.id }}&edit={{ entreprise.id }}" class="admin-inline-btn">Modifier</a>
+                                            <form method="post" action="{{ base_url }}admin/entreprises" onsubmit="return confirm('Supprimer cette entreprise ?');">
+                                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="entreprise_id" value="{{ entreprise.id }}">
+                                                <button type="submit" class="admin-inline-btn admin-inline-btn-danger">Supprimer</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="admin-panel">
+            <div class="admin-panel-head">
+                <div>
+                    <h2>{{ formMode == 'update' ? 'Modifier une entreprise' : 'Creer une entreprise' }}</h2>
+                </div>
+            </div>
+
+            {% if formErrors is not empty %}
+                <div class="admin-flash admin-flash-error">
+                    <ul class="admin-error-list">
+                        {% for error in formErrors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="post" action="{{ base_url }}admin/entreprises" class="admin-company-form">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="action" value="{{ formMode == 'update' ? 'update' : 'create' }}">
+                {% if formMode == 'update' %}
+                    <input type="hidden" name="entreprise_id" value="{{ editCompanyId }}">
+                    <input type="hidden" name="selected_company_id" value="{{ editCompanyId }}">
+                {% endif %}
+
+                <div class="admin-field">
+                    <label for="company-name">Nom</label>
+                    <input type="text" id="company-name" name="nom" class="admin-input" value="{{ companyForm.nom|default('') }}" required>
+                </div>
+
+                <div class="admin-field">
+                    <label for="company-description">Description</label>
+                    <textarea id="company-description" name="description" class="admin-textarea" rows="4" placeholder="Presentation de l entreprise, missions, contexte...">{{ companyForm.description|default('') }}</textarea>
+                </div>
+
+                <div class="admin-form-grid">
+                    <div class="admin-field">
+                        <label for="company-email">Email de contact</label>
+                        <input type="email" id="company-email" name="email" class="admin-input" value="{{ companyForm.email|default('') }}">
+                    </div>
+                    <div class="admin-field">
+                        <label for="company-phone">Telephone</label>
+                        <input type="text" id="company-phone" name="telephone" class="admin-input" value="{{ companyForm.telephone|default('') }}">
+                    </div>
+                    <div class="admin-field">
+                        <label for="company-city">Ville</label>
+                        <input type="text" id="company-city" name="ville" class="admin-input" value="{{ companyForm.ville|default('') }}">
+                    </div>
+                    <div class="admin-field">
+                        <label for="company-sector">Secteur</label>
+                        <input type="text" id="company-sector" name="secteur" class="admin-input" value="{{ companyForm.secteur|default('') }}">
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-btn admin-btn-primary">
+                        {{ formMode == 'update' ? 'Enregistrer les modifications' : 'Creer l entreprise' }}
+                    </button>
+                    {% if formMode == 'update' %}
+                        <a href="{{ base_url }}admin/entreprises?entreprise={{ editCompanyId }}" class="admin-btn admin-btn-muted">Annuler la modification</a>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+    </div>
+
     <section class="admin-panel">
         <div class="admin-panel-head">
             <div>
-                <span class="admin-panel-kicker">Annuaire</span>
-                <h2>Liste des entreprises</h2>
+                <h2>{{ selectedCompany ? 'Fiche detaillee de ' ~ selectedCompany.nom : 'Details entreprise' }}</h2>
             </div>
         </div>
 
-        {% if entreprises is empty %}
-            <p class="admin-empty">Aucune entreprise n'est disponible pour le moment.</p>
+        {% if not selectedCompany %}
+            <p class="admin-empty">Selectionne une entreprise pour consulter les informations detaillees et les offres associees.</p>
         {% else %}
-        <div class="admin-table-wrap">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Ville</th>
-                        <th>Secteur</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entreprise in entreprises %}
-                    <tr>
-                        <td>{{ entreprise.nom ?? '' }}</td>
-                        <td>{{ entreprise.ville ?? '-' }}</td>
-                        <td>{{ entreprise.secteur ?? '-' }}</td>
-                        <td>{{ entreprise.email ?? '-' }}</td>
-                        <td>{{ entreprise.telephone ?? '-' }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            <div class="company-metrics-grid">
+                <article class="company-metric-card">
+                    <span class="company-metric-label">Offres liees</span>
+                    <strong>{{ selectedCompany.offer_count|default(0) }}</strong>
+                </article>
+                <article class="company-metric-card">
+                    <span class="company-metric-label">Stagiaires ayant postule</span>
+                    <strong>{{ selectedCompany.applicant_count|default(0) }}</strong>
+                </article>
+                <article class="company-metric-card">
+                    <span class="company-metric-label">Moyenne des evaluations</span>
+                    <strong>{{ selectedAverageNote }}{{ selectedAverageNote != '-' ? '/5' : '' }}</strong>
+                </article>
+                <article class="company-metric-card">
+                    <span class="company-metric-label">Evaluations</span>
+                    <strong>{{ selectedCompany.evaluation_count|default(0) }}</strong>
+                </article>
+            </div>
+
+            <div class="company-detail-grid">
+                <div class="company-detail-column">
+                    <article class="company-detail-card">
+                        <h3>Informations</h3>
+                        <p class="company-description">{{ (selectedCompany.description|default('Aucune description renseignee.'))|nl2br }}</p>
+                        <div class="company-meta-grid">
+                            <div><span>Email</span><strong>{{ selectedCompany.email|default('-') }}</strong></div>
+                            <div><span>Telephone</span><strong>{{ selectedCompany.telephone|default('-') }}</strong></div>
+                            <div><span>Ville</span><strong>{{ selectedCompany.ville|default('-') }}</strong></div>
+                            <div><span>Secteur</span><strong>{{ selectedCompany.secteur|default('-') }}</strong></div>
+                        </div>
+                    </article>
+
+                    <article class="company-detail-card">
+                        <h3>Offres de cette entreprise</h3>
+                        {% if companyOffers is empty %}
+                            <p class="admin-empty">Aucune offre liee a cette entreprise.</p>
+                        {% else %}
+                            <div class="company-list-stack">
+                                {% for offer in companyOffers %}
+                                    <div class="company-list-item">
+                                        <div>
+                                            <strong>{{ offer.titre }}</strong>
+                                            <div class="admin-table-subline">{{ offer.ville|default('-') }} &middot; {{ offer.domaine|default('-') }}</div>
+                                        </div>
+                                        <span class="company-list-meta">{{ offer.date_offre ? offer.date_offre|date('d/m/Y') : 'Date inconnue' }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </article>
+                </div>
+
+                <div class="company-detail-column">
+                    <article class="company-detail-card company-action-card">
+                        <h3>Actions rapides</h3>
+                        <p class="company-description">Retrouve ici les actions principales pour la fiche selectionnee.</p>
+                        <div class="admin-form-actions">
+                            <a href="{{ base_url }}admin/entreprises?entreprise={{ selectedCompany.id }}&edit={{ selectedCompany.id }}" class="admin-btn admin-btn-secondary">Modifier la fiche</a>
+                            {% if canDeleteSelected %}
+                                <form method="post" action="{{ base_url }}admin/entreprises" onsubmit="return confirm('Supprimer cette entreprise ?');">
+                                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="entreprise_id" value="{{ selectedCompany.id }}">
+                                    <button type="submit" class="admin-btn admin-btn-danger">Supprimer la fiche</button>
+                                </form>
+                            {% else %}
+                                <p class="company-helper-text">Suppression indisponible tant que des offres ou des evaluations sont liees a cette entreprise.</p>
+                            {% endif %}
+                        </div>
+                    </article>
+                </div>
+            </div>
         {% endif %}
     </section>
 </section>
