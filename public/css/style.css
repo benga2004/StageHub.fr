@@ -299,15 +299,15 @@ main.content {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a6b94 0%, #2f8ab6 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 15px rgba(26, 107, 148, 0.4);
 }
 
 .btn-secondary {
     background: white;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #1a6b94;
+    border: 2px solid #1a6b94;
 }
 
 .btn-secondary:hover {
@@ -317,7 +317,7 @@ main.content {
 .btn-submit {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a6b94 0%, #2f8ab6 100%);
     color: white;
     border: none;
     border-radius: 10px;
@@ -326,13 +326,13 @@ main.content {
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: inherit;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(26, 107, 148, 0.3);
     margin-top: 8px;
 }
 
 .btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.45);
+    box-shadow: 0 8px 25px rgba(26, 107, 148, 0.45);
 }
 
 .btn-submit:active {
@@ -381,8 +381,8 @@ main.content {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+    border-color: #1a6b94;
+    box-shadow: 0 0 0 4px rgba(26, 107, 148, 0.12);
     background: #fafbff;
 }
 
@@ -414,7 +414,7 @@ main.content {
     border-radius: 16px;
     padding: 32px 24px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.07);
+    box-shadow: 0 4px 20px rgba(26, 107, 148, 0.07);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 0.6s ease backwards;
 }
@@ -426,12 +426,12 @@ main.content {
 
 .feature-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 20px 40px rgba(26, 107, 148, 0.15);
     border-color: #c5cff7;
 }
 
 .feature-card i {
-    color: #667eea;
+    color: #1a6b94;
     font-size: 2.5rem;
     margin-bottom: 16px;
     display: block;
@@ -460,12 +460,12 @@ main.content {
    ============================================ */
 
 .home-stats {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a6b94 0%, #2f8ab6 100%);
     border-radius: 20px;
     padding: 50px 40px;
     margin: 60px 0;
     color: white;
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 40px rgba(26, 107, 148, 0.3);
     animation: fadeInUp 0.6s ease;
 }
 
@@ -523,7 +523,7 @@ main.content {
     background: white;
     border-radius: 20px;
     margin: 60px 0;
-    box-shadow: 0 4px 30px rgba(102, 126, 234, 0.08);
+    box-shadow: 0 4px 30px rgba(26, 107, 148, 0.08);
     border: 1px solid #e8ecf8;
     animation: fadeInUp 0.6s ease;
 }
@@ -618,7 +618,7 @@ main.content {
 }
 
 .footer-section a:hover {
-    color: #a78bfa;
+    color: #89bdd7;
 }
 
 .social-links {
@@ -639,7 +639,7 @@ main.content {
 }
 
 .social-links a:hover {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #1a6b94, #2f8ab6);
     color: white;
     transform: translateY(-3px);
 }
@@ -654,7 +654,7 @@ main.content {
 }
 
 .footer-bottom a {
-    color: #a78bfa;
+    color: #89bdd7;
     transition: color 0.3s;
 }
 
@@ -702,8 +702,8 @@ main.content {
 }
 
 @keyframes borderGlow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
-    50%       { box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.2); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(26, 107, 148, 0); }
+    50%       { box-shadow: 0 0 0 6px rgba(26, 107, 148, 0.2); }
 }
 
 @keyframes gradientFlow {
@@ -738,7 +738,7 @@ main.content {
 /* Shared hero banner */
 .legal-hero {
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a6b94 0%, #2f8ab6 100%);
     border-radius: 20px;
     padding: 56px 32px 48px;
     color: #fff;
@@ -803,7 +803,7 @@ main.content {
 }
 
 .legal-section h2 i {
-    color: #667eea;
+    color: #1a6b94;
     font-size: 1rem;
 }
 
@@ -830,13 +830,13 @@ main.content {
     content: "›";
     position: absolute;
     left: 6px;
-    color: #667eea;
+    color: #1a6b94;
     font-weight: 700;
     font-size: 1.1rem;
 }
 
 .legal-section a {
-    color: #667eea;
+    color: #1a6b94;
     font-weight: 600;
 }
 
@@ -901,8 +901,8 @@ main.content {
 .contact-form-card select:focus,
 .contact-form-card textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
+    border-color: #1a6b94;
+    box-shadow: 0 0 0 3px rgba(26, 107, 148,0.12);
     background: #fff;
 }
 
@@ -952,11 +952,11 @@ main.content {
 
 /* Info panel (right column) */
 .contact-info-panel {
-    background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(145deg, #1a6b94 0%, #2f8ab6 100%);
     border-radius: 16px;
     padding: 36px 28px;
     color: #fff;
-    box-shadow: 0 4px 28px rgba(102,126,234,0.30);
+    box-shadow: 0 4px 28px rgba(26, 107, 148,0.30);
 }
 
 .contact-info-panel h2 {
@@ -1082,7 +1082,7 @@ main.content {
 
 .wishlist-btn:hover,
 .wishlist-btn.active {
-    color: #667eea;
+    color: #1a6b94;
 }
 
 .wishlist-btn:hover {
@@ -1217,7 +1217,7 @@ header.header {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(102,126,234,0.06) 0%, transparent 60%);
+    background: linear-gradient(135deg, rgba(26, 107, 148,0.06) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.4s ease;
     border-radius: inherit;
@@ -1236,7 +1236,7 @@ header.header {
     transform: translateX(-50%) scaleX(0);
     width: 60%;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #1a6b94, #2f8ab6);
     border-radius: 2px 2px 0 0;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1305,7 +1305,7 @@ header.header {
 }
 
 .form-group:focus-within label {
-    color: #667eea;
+    color: #1a6b94;
 }
 
 /* ============================================
@@ -1346,7 +1346,7 @@ header.header {
     left: 0;
     width: 0;
     height: 1px;
-    background: #a78bfa;
+    background: #89bdd7;
     transition: width 0.3s ease;
 }
 

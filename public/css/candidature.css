@@ -34,12 +34,12 @@
     width: 66px;
     height: 66px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a6b94 0%, #2f8ab6 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.38);
+    box-shadow: 0 8px 24px rgba(26, 107, 148, 0.38);
 }
 
 .cand-hero-icon i {
@@ -145,7 +145,7 @@
 
 .cand-section-title:first-of-type { margin-top: 0; }
 
-.cand-section-title i { color: #667eea; }
+.cand-section-title i { color: #1a6b94; }
 
 /* ── Ligne 2 colonnes (Prénom / Nom) ── */
 .cand-row {
@@ -163,7 +163,7 @@
 /* ── Zone de dépôt de fichier ── */
 .cand-file-drop {
     position: relative;
-    border: 2px dashed #a5b4fc;
+    border: 2px dashed #89bdd7;
     border-radius: 12px;
     background: #f5f3ff;
     padding: 24px 16px 20px;
@@ -173,13 +173,13 @@
 }
 
 .cand-file-drop:hover {
-    border-color: #6366f1;
+    border-color: #1a6b94;
     background: #ede9fe;
 }
 
 .cand-file-icon {
     font-size: 2rem;
-    color: #818cf8;
+    color: #2f8ab6;
     margin-bottom: 8px;
     display: block;
 }
@@ -190,7 +190,7 @@
 }
 
 .cand-file-browse {
-    color: #667eea;
+    color: #1a6b94;
     font-weight: 700;
     text-decoration: underline;
 }

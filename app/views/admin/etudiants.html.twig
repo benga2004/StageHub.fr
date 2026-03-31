@@ -1,0 +1,192 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Gestion des étudiants - StageHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=4">
+{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard">
+    <div class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-kicker">Gestion</span>
+            <h1>Étudiants</h1>
+            <p>{{ etudiants|length }} étudiant(s) inscrit(s) sur la plateforme.</p>
+        </div>
+        <div class="admin-hero-actions">
+            {% if session.user_role == 'admin' %}
+            <a href="{{ base_url }}admin" class="admin-btn admin-btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Retour au dashboard
+            </a>
+            {% elseif session.user_role == 'pilote' %}
+            <a href="{{ base_url }}dashboard" class="admin-btn admin-btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Retour au dashboard
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if message %}
+    <div class="admin-alert admin-alert-{{ messageType }}">
+        {{ message }}
+    </div>
+    {% endif %}
+
+    {# ── Formulaire de création ── #}
+    <section class="admin-panel">
+        <div class="admin-panel-head">
+            <div>
+                <span class="admin-panel-kicker">Nouveau</span>
+                <h2>Créer un étudiant</h2>
+            </div>
+        </div>
+        <form method="POST" action="{{ base_url }}admin/etudiants/create" class="admin-form">
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required placeholder="Prénom">
+                </div>
+                <div class="admin-form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" required placeholder="Nom">
+                </div>
+                <div class="admin-form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="email@exemple.com">
+                </div>
+                <div class="admin-form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required minlength="8" placeholder="Min. 8 caractères">
+                </div>
+            </div>
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn-primary">
+                    <i class="bi bi-person-plus-fill"></i>
+                    Créer l'étudiant
+                </button>
+            </div>
+        </form>
+    </section>
+
+    {# ── Recherche + Liste ── #}
+    <section class="admin-panel">
+        <div class="admin-panel-head">
+            <div>
+                <span class="admin-panel-kicker">Annuaire</span>
+                <h2>Liste des étudiants</h2>
+            </div>
+        </div>
+
+        <form method="GET" action="{{ base_url }}admin/etudiants" class="admin-search-bar">
+            <input type="text" name="q" value="{{ search }}" placeholder="Rechercher par nom, prénom ou email…" class="admin-search-input">
+            <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm">
+                <i class="bi bi-search"></i>
+                Rechercher
+            </button>
+            {% if search %}
+            <a href="{{ base_url }}admin/etudiants" class="admin-btn admin-btn-secondary admin-btn-sm">
+                <i class="bi bi-x-lg"></i>
+                Réinitialiser
+            </a>
+            {% endif %}
+        </form>
+
+        {% if etudiants is empty %}
+            <p class="admin-empty">Aucun étudiant trouvé.</p>
+        {% else %}
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for etudiant in etudiants %}
+                    <tr>
+                        <td>{{ etudiant.id }}</td>
+                        <td>{{ etudiant.prenom ~ ' ' ~ etudiant.nom }}</td>
+                        <td>{{ etudiant.email }}</td>
+                        <td>
+                            <div class="admin-actions-wrap">
+                                <button type="button" class="admin-btn-edit" title="Modifier" onclick="openEditModal({{ etudiant.id }}, '{{ etudiant.nom|e('js') }}', '{{ etudiant.prenom|e('js') }}', '{{ etudiant.email|e('js') }}')">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                                <form method="POST" action="{{ base_url }}admin/etudiants/delete" class="admin-inline-form" onsubmit="return confirm('Supprimer cet étudiant ?')">
+                                    <input type="hidden" name="id" value="{{ etudiant.id }}">
+                                    <button type="submit" class="admin-btn-delete" title="Supprimer">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </section>
+</section>
+
+{# ── Modal de modification ── #}
+<div id="editModal" class="admin-modal-overlay" style="display:none;">
+    <div class="admin-modal">
+        <div class="admin-modal-head">
+            <h2>Modifier l'étudiant</h2>
+            <button type="button" class="admin-modal-close" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form method="POST" action="{{ base_url }}admin/etudiants/edit">
+            <input type="hidden" id="edit-id" name="id">
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label for="edit-prenom">Prénom</label>
+                    <input type="text" id="edit-prenom" name="prenom" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="edit-nom">Nom</label>
+                    <input type="text" id="edit-nom" name="nom" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" name="email" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="edit-password">Nouveau mot de passe <small>(laisser vide = inchangé)</small></label>
+                    <input type="password" id="edit-password" name="password" minlength="8" placeholder="Min. 8 caractères">
+                </div>
+            </div>
+            <div class="admin-form-actions">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeEditModal()">Annuler</button>
+                <button type="submit" class="admin-btn admin-btn-primary">
+                    <i class="bi bi-check-lg"></i>
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal(id, nom, prenom, email) {
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-nom').value = nom;
+    document.getElementById('edit-prenom').value = prenom;
+    document.getElementById('edit-email').value = email;
+    document.getElementById('edit-password').value = '';
+    document.getElementById('editModal').style.display = 'flex';
+}
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+});
+</script>
+{% endblock %}

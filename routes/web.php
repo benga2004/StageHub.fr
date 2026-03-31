@@ -59,6 +59,18 @@ switch ($url) {
     case 'admin/entreprises':
         (new AdminController())->entreprises();
         break;
+    case 'admin/etudiants':
+        (new AdminController())->etudiants();
+        break;
+    case 'admin/etudiants/create':
+        (new AdminController())->createEtudiant();
+        break;
+    case 'admin/etudiants/delete':
+        (new AdminController())->deleteEtudiant();
+        break;
+    case 'admin/etudiants/edit':
+        (new AdminController())->editEtudiant();
+        break;
     case 'offres/ajouter':
         if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'pilote' || $_SESSION['user_role'] == 'admin')) {
                 (new OfferController())->add();

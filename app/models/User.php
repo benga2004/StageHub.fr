@@ -64,4 +64,21 @@ class User {
         $stmt = $this->db->prepare('UPDATE users SET cv_path = :cv WHERE id = :id');
         return $stmt->execute([':cv' => $cvPath, ':id' => $id]);
     }
+
+    public function getByRole(string $role): array {
+        $stmt = $this->db->prepare('SELECT id, nom, prenom, email, role FROM users WHERE role = :role ORDER BY nom, prenom');
+        $stmt->execute([':role' => $role]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function searchByRole(string $role, string $search): array {
+        $stmt = $this->db->prepare('
+            SELECT id, nom, prenom, email, role FROM users
+            WHERE role = :role
+              AND (nom LIKE :s OR prenom LIKE :s OR email LIKE :s)
+            ORDER BY nom, prenom
+        ');
+        $stmt->execute([':role' => $role, ':s' => '%' . $search . '%']);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

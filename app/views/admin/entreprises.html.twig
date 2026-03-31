@@ -3,23 +3,7 @@
 {% block title %}Administration des entreprises - StageHub{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=3">
-{% endblock %}
-
-{% block page_header %}
-<header class="header">
-    <div class="header-logo">
-        <div class="header-logo-icon">S</div>
-        StageHub
-    </div>
-    <div class="header-right">
-        <div class="header-user">
-            <div>{{ session.user_prenom ?? 'Admin' }}</div>
-            <span class="role-badge">Administrateur</span>
-        </div>
-        <a href="{{ base_url }}deconnexion" class="btn-logout">&#x23FB;</a>
-    </div>
-</header>
+<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=4">
 {% endblock %}
 
 {% block content %}

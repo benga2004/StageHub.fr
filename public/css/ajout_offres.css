@@ -55,7 +55,7 @@
 }
 
 .avantage-tag:has(input:checked) {
-    border-color: #000;
+    border-color: #1a6b94;
     background: #fff;
     font-weight: 500;
 }
@@ -87,8 +87,8 @@
 .avantage-custom-add button {
     padding: 6px 14px;
     border-radius: 20px;
-    border: 1px solid #000;
-    background: #000;
+    border: 1px solid #1a6b94;
+    background: #1a6b94;
     color: #fff;
     cursor: pointer;
     font-size: 0.9rem;
