@@ -1,131 +1,91 @@
-<?php
-// app/views/admin/pilotes.php
-// Gestion complète des pilotes en un seul fichier (liste, voir, créer, modifier, supprimer)
+{% extends 'layout/base.html.twig' %}
 
-// --- Détermination de l'action et de l'id ---
-$action = $_GET['action'] ?? 'liste';
-$id     = isset($_GET['id']) ? (int)$_GET['id'] : null;
+{% block title %}
+{% if action == 'voir' and pilot.id %}
+Fiche pilote - StageHub
+{% elseif action == 'creer' %}
+Ajouter un pilote - StageHub
+{% elseif action == 'modifier' %}
+Modifier un pilote - StageHub
+{% elseif action == 'supprimer' %}
+Supprimer un pilote - StageHub
+{% else %}
+Gestion des pilotes - StageHub
+{% endif %}
+{% endblock %}
 
-// --- Titre et CSS selon l'action ---
-$titles = [
-    'liste'     => 'Pilotes - StageHub',
-    'voir'      => 'Fiche Pilote - StageHub',
-    'creer'     => 'Ajouter un Pilote - StageHub',
-    'modifier'  => 'Modifier un Pilote - StageHub',
-    'supprimer' => 'Supprimer un Pilote - StageHub',
-];
-$title     = $titles[$action] ?? 'Pilotes - StageHub';
-$extra_css = '<link rel="stylesheet" href="' . BASE_URL . 'css/admin.css?v=3">';
+{% block extra_css %}
+<link rel="stylesheet" href="{{ base_url }}css/admin.css?v=5">
+{% endblock %}
 
-require BASE_PATH . '/app/views/layout/header.php';
-
-// --- Helpers ---
-function e(string $s): string {
-    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
-}
-
-// --- Chargement du pilote courant si besoin ---
-// $pilotes    : tableau de tous les pilotes (fourni par le contrôleur)
-// $pilote     : pilote sélectionné (fourni par le contrôleur pour voir/modifier/supprimer)
-// $entreprises: liste des entreprises pour le select (fourni par le contrôleur)
-// $recherche  : chaîne de recherche courante
-// $errors     : tableau d'erreurs de validation
-// $message    : message flash (string)
-// $messageType: 'success' | 'error'
-
-$pilote      = $pilote      ?? [];
-$pilotes     = $pilotes     ?? [];
-$entreprises = $entreprises ?? [];
-$recherche   = $recherche   ?? '';
-$errors      = $errors      ?? [];
-$message     = $message     ?? '';
-$messageType = $messageType ?? '';
-$isEdit      = ($action === 'modifier' && !empty($pilote['id']));
-?>
-
+{% block content %}
 <section class="admin-dashboard">
-
-    <!-- ===== HERO ===== -->
     <div class="admin-hero">
         <div>
             <span class="admin-kicker">Espace administration</span>
-            <?php if ($action === 'liste'): ?>
-                <h1>Gestion des Pilotes</h1>
-                <p>Recherchez, créez, modifiez ou supprimez les comptes pilotes de la plateforme.</p>
-
-            <?php elseif ($action === 'voir'): ?>
-                <h1><?= e(trim(($pilote['prenom'] ?? '') . ' ' . ($pilote['nom'] ?? ''))) ?></h1>
-                <p>Fiche détaillée du pilote.</p>
-
-            <?php elseif ($action === 'creer'): ?>
+            {% if action == 'liste' %}
+                <h1>Gestion des pilotes</h1>
+                <p>Recherchez, creez, modifiez ou supprimez les comptes pilotes de la plateforme.</p>
+            {% elseif action == 'voir' and pilot.id %}
+                <h1>{{ pilot.prenom }} {{ pilot.nom }}</h1>
+                <p>Fiche detaillee du pilote et acces rapides pour la gestion du compte.</p>
+            {% elseif action == 'creer' %}
                 <h1>Ajouter un pilote</h1>
-                <p>Remplissez le formulaire pour créer un nouveau compte pilote.</p>
-
-            <?php elseif ($action === 'modifier'): ?>
+                <p>Remplissez le formulaire pour creer un nouveau compte pilote.</p>
+            {% elseif action == 'modifier' and pilot.id %}
                 <h1>Modifier un pilote</h1>
-                <p>Mettez à jour les informations de <?= e(trim(($pilote['prenom'] ?? '') . ' ' . ($pilote['nom'] ?? ''))) ?>.</p>
-
-            <?php elseif ($action === 'supprimer'): ?>
+                <p>Mettez a jour les informations de {{ pilot.prenom }} {{ pilot.nom }}.</p>
+            {% elseif action == 'supprimer' and pilot.id %}
                 <h1>Supprimer un pilote</h1>
-                <p>Cette action est irréversible.</p>
-            <?php endif; ?>
+                <p>Cette action est irreversible. Verifiez les informations avant de confirmer.</p>
+            {% endif %}
         </div>
 
         <div class="admin-hero-actions">
-            <?php if ($action === 'liste'): ?>
-                <a href="<?= BASE_URL ?>admin/pilotes?action=creer" class="admin-btn admin-btn-primary">
+            {% if action == 'liste' %}
+                <a href="{{ base_url }}admin/pilotes?action=creer" class="admin-btn admin-btn-primary">
                     <i class="bi bi-person-plus-fill"></i>
                     Ajouter un pilote
                 </a>
-                <a href="<?= BASE_URL ?>admin" class="admin-btn admin-btn-secondary">
+                <a href="{{ base_url }}admin" class="admin-btn admin-btn-secondary">
                     <i class="bi bi-arrow-left"></i>
-                    Dashboard
+                    Retour au dashboard
                 </a>
-
-            <?php elseif ($action === 'voir'): ?>
-                <a href="<?= BASE_URL ?>admin/pilotes?action=modifier&id=<?= (int)($pilote['id'] ?? 0) ?>" class="admin-btn admin-btn-primary">
-                    <i class="bi bi-pencil"></i>
+            {% elseif action == 'voir' and pilot.id %}
+                <a href="{{ base_url }}admin/pilotes?action=modifier&id={{ pilot.id }}" class="admin-btn admin-btn-primary">
+                    <i class="bi bi-pencil-fill"></i>
                     Modifier
                 </a>
-                <a href="<?= BASE_URL ?>admin/pilotes" class="admin-btn admin-btn-secondary">
+                <a href="{{ base_url }}admin/pilotes" class="admin-btn admin-btn-secondary">
                     <i class="bi bi-arrow-left"></i>
-                    Retour à la liste
+                    Retour a la liste
                 </a>
-
-            <?php else: ?>
-                <a href="<?= BASE_URL ?>admin/pilotes" class="admin-btn admin-btn-secondary">
+            {% else %}
+                <a href="{{ base_url }}admin/pilotes" class="admin-btn admin-btn-secondary">
                     <i class="bi bi-arrow-left"></i>
-                    Retour à la liste
+                    Retour a la liste
                 </a>
-            <?php endif; ?>
+            {% endif %}
         </div>
     </div>
 
-    <!-- ===== MESSAGE FLASH ===== -->
-    <?php if ($message !== ''): ?>
-        <div class="admin-flash admin-flash-<?= e($messageType) ?>">
-            <?= e($message) ?>
+    {% if pilotFlash %}
+        <div class="admin-alert admin-alert-{{ pilotFlash.type }}">
+            {{ pilotFlash.message }}
         </div>
-    <?php endif; ?>
+    {% endif %}
 
-    <!-- ===== ERREURS DE VALIDATION ===== -->
-    <?php if (!empty($errors)): ?>
-        <div class="admin-flash admin-flash-error">
-            <ul style="margin:0;padding-left:1.2rem;">
-                <?php foreach ($errors as $err): ?>
-                    <li><?= e($err) ?></li>
-                <?php endforeach; ?>
+    {% if formErrors is not empty %}
+        <div class="admin-alert admin-alert-error">
+            <ul style="margin: 0; padding-left: 1.2rem;">
+                {% for error in formErrors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
             </ul>
         </div>
-    <?php endif; ?>
+    {% endif %}
 
-
-    <!-- ========================================================== -->
-    <!-- ACTION : LISTE                                              -->
-    <!-- ========================================================== -->
-    <?php if ($action === 'liste'): ?>
-
-        <!-- Recherche -->
+    {% if action == 'liste' %}
         <section class="admin-panel">
             <div class="admin-panel-head">
                 <div>
@@ -133,359 +93,238 @@ $isEdit      = ($action === 'modifier' && !empty($pilote['id']));
                     <h2>Filtrer les pilotes</h2>
                 </div>
             </div>
-            <form method="GET" action="<?= BASE_URL ?>admin/pilotes" class="admin-search-form">
+
+            <form method="GET" action="{{ base_url }}admin/pilotes" class="admin-search-bar">
                 <input type="hidden" name="action" value="liste">
-                <input
-                    type="text"
-                    name="q"
-                    class="admin-search-input"
-                    placeholder="Nom, prénom, email, entreprise…"
-                    value="<?= e($recherche) ?>"
-                >
-                <button type="submit" class="admin-btn admin-btn-primary">
+                <input type="text" name="q" value="{{ search }}" placeholder="Nom, prenom ou email..." class="admin-search-input">
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm">
                     <i class="bi bi-search"></i>
                     Rechercher
                 </button>
-                <?php if ($recherche !== ''): ?>
-                    <a href="<?= BASE_URL ?>admin/pilotes" class="admin-btn admin-btn-secondary">
-                        <i class="bi bi-x"></i>
-                        Effacer
+                {% if search %}
+                    <a href="{{ base_url }}admin/pilotes" class="admin-btn admin-btn-secondary admin-btn-sm">
+                        <i class="bi bi-x-lg"></i>
+                        Reinitialiser
                     </a>
-                <?php endif; ?>
+                {% endif %}
             </form>
         </section>
 
-        <!-- Tableau -->
         <section class="admin-panel">
             <div class="admin-panel-head">
                 <div>
                     <span class="admin-panel-kicker">Pilotes</span>
-                    <h2>
-                        Liste —
-                        <?php if ($recherche !== ''): ?>
-                            <?= count($pilotes) ?> résultat(s) pour "<?= e($recherche) ?>"
-                        <?php else: ?>
-                            <?= count($pilotes) ?> au total
-                        <?php endif; ?>
-                    </h2>
+                    <h2>{{ pilotes|length }} compte(s) pilote</h2>
                 </div>
             </div>
 
-            <?php if (empty($pilotes)): ?>
-                <p class="admin-empty">Aucun pilote trouvé.</p>
-            <?php else: ?>
+            {% if pilotes is empty %}
+                <p class="admin-empty">Aucun pilote trouve.</p>
+            {% else %}
                 <div class="admin-table-wrap">
                     <table class="admin-table">
                         <thead>
                             <tr>
                                 <th>Nom</th>
                                 <th>Email</th>
-                                <th>Entreprise</th>
-                                <th>Étudiants suivis</th>
-                                <th>Statut</th>
+                                <th>Cree le</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($pilotes as $p): ?>
+                            {% for pilote in pilotes %}
                                 <tr>
-                                    <td><?= e(trim(($p['prenom'] ?? '') . ' ' . ($p['nom'] ?? ''))) ?></td>
-                                    <td><?= e($p['email'] ?? '') ?></td>
-                                    <td><?= e($p['entreprise'] ?? '—') ?></td>
-                                    <td><?= (int)($p['nb_etudiants'] ?? 0) ?></td>
                                     <td>
-                                        <span class="admin-role-pill admin-role-<?= $p['actif'] ? 'actif' : 'inactif' ?>">
-                                            <?= $p['actif'] ? 'Actif' : 'Inactif' ?>
-                                        </span>
+                                        <strong>{{ pilote.prenom }} {{ pilote.nom }}</strong>
+                                        <div class="admin-table-subline">Compte pilote</div>
                                     </td>
-                                    <td class="admin-table-actions">
-                                        <a href="<?= BASE_URL ?>admin/pilotes?action=voir&id=<?= (int)$p['id'] ?>"
-                                           class="admin-action-btn" title="Voir">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="<?= BASE_URL ?>admin/pilotes?action=modifier&id=<?= (int)$p['id'] ?>"
-                                           class="admin-action-btn" title="Modifier">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="<?= BASE_URL ?>admin/pilotes?action=supprimer&id=<?= (int)$p['id'] ?>"
-                                           class="admin-action-btn admin-action-btn-danger" title="Supprimer">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
+                                    <td>{{ pilote.email }}</td>
+                                    <td>
+                                        {% if pilote.created_at %}
+                                            {{ pilote.created_at|date('d/m/Y H:i') }}
+                                        {% else %}
+                                            Non renseigne
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="admin-actions-wrap">
+                                            <a href="{{ base_url }}admin/pilotes?action=voir&id={{ pilote.id }}" class="admin-btn admin-btn-muted admin-btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                                Voir
+                                            </a>
+                                            <a href="{{ base_url }}admin/pilotes?action=modifier&id={{ pilote.id }}" class="admin-btn admin-btn-muted admin-btn-sm">
+                                                <i class="bi bi-pencil-fill"></i>
+                                                Modifier
+                                            </a>
+                                            <a href="{{ base_url }}admin/pilotes?action=supprimer&id={{ pilote.id }}" class="admin-btn admin-btn-danger admin-btn-sm">
+                                                <i class="bi bi-trash-fill"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            <?php endif; ?>
+            {% endif %}
         </section>
-
-
-    <!-- ========================================================== -->
-    <!-- ACTION : VOIR                                               -->
-    <!-- ========================================================== -->
-    <?php elseif ($action === 'voir' && !empty($pilote)): ?>
-
+    {% elseif action == 'voir' and pilot.id %}
         <div class="admin-grid">
-
-            <!-- Informations -->
             <section class="admin-panel">
                 <div class="admin-panel-head">
                     <div>
                         <span class="admin-panel-kicker">Profil</span>
-                        <h2>Informations</h2>
+                        <h2>Informations du pilote</h2>
                     </div>
                 </div>
+
                 <div class="admin-summary-list">
                     <div class="admin-summary-row">
-                        <span class="admin-summary-label">Prénom</span>
-                        <strong><?= e($pilote['prenom'] ?? '—') ?></strong>
+                        <span class="admin-summary-label">Prenom</span>
+                        <strong>{{ pilot.prenom }}</strong>
                     </div>
                     <div class="admin-summary-row">
                         <span class="admin-summary-label">Nom</span>
-                        <strong><?= e($pilote['nom'] ?? '—') ?></strong>
+                        <strong>{{ pilot.nom }}</strong>
                     </div>
                     <div class="admin-summary-row">
                         <span class="admin-summary-label">Email</span>
-                        <strong><?= e($pilote['email'] ?? '—') ?></strong>
+                        <strong>{{ pilot.email }}</strong>
                     </div>
                     <div class="admin-summary-row">
-                        <span class="admin-summary-label">Téléphone</span>
-                        <strong><?= e($pilote['telephone'] ?? '—') ?></strong>
+                        <span class="admin-summary-label">Role</span>
+                        <span class="admin-role-pill admin-role-pilote">Pilote</span>
                     </div>
                     <div class="admin-summary-row">
-                        <span class="admin-summary-label">Entreprise</span>
-                        <strong><?= e($pilote['entreprise'] ?? '—') ?></strong>
-                    </div>
-                    <div class="admin-summary-row">
-                        <span class="admin-summary-label">Étudiants suivis</span>
-                        <strong><?= (int)($pilote['nb_etudiants'] ?? 0) ?></strong>
-                    </div>
-                    <div class="admin-summary-row">
-                        <span class="admin-summary-label">Statut</span>
-                        <span class="admin-role-pill admin-role-<?= !empty($pilote['actif']) ? 'actif' : 'inactif' ?>">
-                            <?= !empty($pilote['actif']) ? 'Actif' : 'Inactif' ?>
-                        </span>
+                        <span class="admin-summary-label">Cree le</span>
+                        <strong>
+                            {% if pilot.created_at %}
+                                {{ pilot.created_at|date('d/m/Y H:i') }}
+                            {% else %}
+                                Non renseigne
+                            {% endif %}
+                        </strong>
                     </div>
                 </div>
             </section>
 
-            <!-- Actions rapides -->
             <section class="admin-panel">
                 <div class="admin-panel-head">
                     <div>
                         <span class="admin-panel-kicker">Actions</span>
-                        <h2>Gestion</h2>
+                        <h2>Gestion rapide</h2>
                     </div>
                 </div>
-                <div class="admin-modules-grid">
-                    <a href="<?= BASE_URL ?>admin/pilotes?action=modifier&id=<?= (int)$pilote['id'] ?>" class="admin-module-card">
-                        <div class="admin-module-icon"><i class="bi bi-pencil-fill"></i></div>
-                        <div class="admin-module-body">
-                            <div class="admin-module-topline"><h3>Modifier</h3></div>
-                            <p>Mettre à jour les informations du pilote.</p>
-                            <span class="admin-module-status">Disponible</span>
-                        </div>
-                    </a>
-                    <a href="<?= BASE_URL ?>admin/pilotes?action=supprimer&id=<?= (int)$pilote['id'] ?>" class="admin-module-card">
-                        <div class="admin-module-icon"><i class="bi bi-trash-fill"></i></div>
-                        <div class="admin-module-body">
-                            <div class="admin-module-topline"><h3>Supprimer</h3></div>
-                            <p>Supprimer définitivement ce compte pilote.</p>
-                            <span class="admin-module-status admin-module-status-muted">Irréversible</span>
-                        </div>
-                    </a>
+
+                <div class="admin-summary-list">
+                    <div class="admin-summary-row">
+                        <span class="admin-summary-label">Modifier la fiche</span>
+                        <a href="{{ base_url }}admin/pilotes?action=modifier&id={{ pilot.id }}" class="admin-btn admin-btn-primary admin-btn-sm">
+                            Modifier
+                        </a>
+                    </div>
+                    <div class="admin-summary-row">
+                        <span class="admin-summary-label">Supprimer le compte</span>
+                        <a href="{{ base_url }}admin/pilotes?action=supprimer&id={{ pilot.id }}" class="admin-btn admin-btn-danger admin-btn-sm">
+                            Supprimer
+                        </a>
+                    </div>
                 </div>
             </section>
-
         </div>
-
-
-    <!-- ========================================================== -->
-    <!-- ACTION : CRÉER / MODIFIER                                  -->
-    <!-- ========================================================== -->
-    <?php elseif ($action === 'creer' || $action === 'modifier'): ?>
-
+    {% elseif action in ['creer', 'modifier'] %}
         <section class="admin-panel">
             <div class="admin-panel-head">
                 <div>
-                    <span class="admin-panel-kicker"><?= $isEdit ? 'Modification' : 'Création' ?></span>
-                    <h2>Informations du pilote</h2>
+                    <span class="admin-panel-kicker">Formulaire</span>
+                    <h2>{% if action == 'creer' %}Nouveau pilote{% else %}Mettre a jour le compte{% endif %}</h2>
                 </div>
             </div>
 
-            <form
-                method="POST"
-                action="<?= $isEdit
-                    ? BASE_URL . 'admin/pilotes?action=modifier&id=' . (int)$pilote['id']
-                    : BASE_URL . 'admin/pilotes?action=creer' ?>"
-                class="admin-form"
-            >
-                <?php if ($isEdit): ?>
-                    <input type="hidden" name="id" value="<?= (int)$pilote['id'] ?>">
-                <?php endif; ?>
+            <form method="POST" action="{{ base_url }}admin/pilotes">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="action" value="{{ action }}">
+                {% if action == 'modifier' and pilot.id %}
+                    <input type="hidden" name="id" value="{{ pilot.id }}">
+                {% endif %}
 
                 <div class="admin-form-grid">
-
                     <div class="admin-form-group">
-                        <label for="prenom">Prénom <span class="admin-required">*</span></label>
-                        <input
-                            type="text"
-                            id="prenom"
-                            name="prenom"
-                            class="admin-form-input"
-                            value="<?= e($pilote['prenom'] ?? '') ?>"
-                            required
-                        >
+                        <label for="pilot-prenom">Prenom</label>
+                        <input type="text" id="pilot-prenom" name="prenom" required value="{{ pilotForm.prenom }}" placeholder="Prenom">
                     </div>
-
                     <div class="admin-form-group">
-                        <label for="nom">Nom <span class="admin-required">*</span></label>
-                        <input
-                            type="text"
-                            id="nom"
-                            name="nom"
-                            class="admin-form-input"
-                            value="<?= e($pilote['nom'] ?? '') ?>"
-                            required
-                        >
+                        <label for="pilot-nom">Nom</label>
+                        <input type="text" id="pilot-nom" name="nom" required value="{{ pilotForm.nom }}" placeholder="Nom">
                     </div>
-
                     <div class="admin-form-group">
-                        <label for="email">Email <span class="admin-required">*</span></label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="admin-form-input"
-                            value="<?= e($pilote['email'] ?? '') ?>"
-                            required
-                        >
+                        <label for="pilot-email">Email</label>
+                        <input type="email" id="pilot-email" name="email" required value="{{ pilotForm.email }}" placeholder="email@exemple.com">
                     </div>
-
                     <div class="admin-form-group">
-                        <label for="telephone">Téléphone</label>
-                        <input
-                            type="tel"
-                            id="telephone"
-                            name="telephone"
-                            class="admin-form-input"
-                            value="<?= e($pilote['telephone'] ?? '') ?>"
-                        >
-                    </div>
-
-                    <div class="admin-form-group">
-                        <label for="entreprise_id">Entreprise</label>
-                        <select id="entreprise_id" name="entreprise_id" class="admin-form-input">
-                            <option value="">— Aucune —</option>
-                            <?php foreach ($entreprises as $ent): ?>
-                                <option
-                                    value="<?= (int)$ent['id'] ?>"
-                                    <?= (isset($pilote['entreprise_id']) && (int)$pilote['entreprise_id'] === (int)$ent['id']) ? 'selected' : '' ?>
-                                >
-                                    <?= e($ent['nom']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <?php if (!$isEdit): ?>
-                        <div class="admin-form-group">
-                            <label for="mot_de_passe">Mot de passe <span class="admin-required">*</span></label>
-                            <input
-                                type="password"
-                                id="mot_de_passe"
-                                name="mot_de_passe"
-                                class="admin-form-input"
-                                required
-                            >
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="admin-form-group admin-form-group-full">
-                        <label class="admin-checkbox-label">
-                            <input
-                                type="checkbox"
-                                name="actif"
-                                value="1"
-                                <?= !empty($pilote['actif']) ? 'checked' : '' ?>
-                            >
-                            Compte actif
+                        <label for="pilot-password">
+                            {% if action == 'creer' %}
+                                Mot de passe
+                            {% else %}
+                                Nouveau mot de passe
+                            {% endif %}
                         </label>
+                        <input type="password" id="pilot-password" name="password" {% if action == 'creer' %}required{% endif %} minlength="8" placeholder="{% if action == 'creer' %}Min. 8 caracteres{% else %}Laisser vide pour conserver l'ancien{% endif %}">
                     </div>
-
                 </div>
 
                 <div class="admin-form-actions">
-                    <button type="submit" class="admin-btn admin-btn-primary">
-                        <i class="bi bi-check-lg"></i>
-                        <?= $isEdit ? 'Enregistrer les modifications' : 'Créer le pilote' ?>
-                    </button>
-                    <a href="<?= BASE_URL ?>admin/pilotes" class="admin-btn admin-btn-secondary">
+                    <a href="{{ base_url }}admin/pilotes{% if action == 'modifier' and pilot.id %}?action=voir&id={{ pilot.id }}{% endif %}" class="admin-btn admin-btn-secondary">
                         Annuler
                     </a>
+                    <button type="submit" class="admin-btn admin-btn-primary">
+                        <i class="bi bi-check-lg"></i>
+                        {% if action == 'creer' %}Creer le pilote{% else %}Enregistrer les modifications{% endif %}
+                    </button>
                 </div>
-
             </form>
         </section>
-
-
-    <!-- ========================================================== -->
-    <!-- ACTION : SUPPRIMER (confirmation)                          -->
-    <!-- ========================================================== -->
-    <?php elseif ($action === 'supprimer' && !empty($pilote)): ?>
-
+    {% elseif action == 'supprimer' and pilot.id %}
         <section class="admin-panel">
             <div class="admin-panel-head">
                 <div>
                     <span class="admin-panel-kicker">Confirmation</span>
-                    <h2>Êtes-vous sûr ?</h2>
+                    <h2>Supprimer ce compte pilote</h2>
                 </div>
             </div>
 
             <div class="admin-summary-list">
                 <div class="admin-summary-row">
-                    <span class="admin-summary-label">Nom</span>
-                    <strong><?= e(trim(($pilote['prenom'] ?? '') . ' ' . ($pilote['nom'] ?? ''))) ?></strong>
+                    <span class="admin-summary-label">Pilote</span>
+                    <strong>{{ pilot.prenom }} {{ pilot.nom }}</strong>
                 </div>
                 <div class="admin-summary-row">
                     <span class="admin-summary-label">Email</span>
-                    <strong><?= e($pilote['email'] ?? '—') ?></strong>
+                    <strong>{{ pilot.email }}</strong>
                 </div>
                 <div class="admin-summary-row">
-                    <span class="admin-summary-label">Entreprise</span>
-                    <strong><?= e($pilote['entreprise'] ?? '—') ?></strong>
-                </div>
-                <div class="admin-summary-row">
-                    <span class="admin-summary-label">Étudiants suivis</span>
-                    <strong><?= (int)($pilote['nb_etudiants'] ?? 0) ?></strong>
+                    <span class="admin-summary-label">Role</span>
+                    <span class="admin-role-pill admin-role-pilote">Pilote</span>
                 </div>
             </div>
 
-            <div class="admin-flash admin-flash-error" style="margin-top:1.5rem;">
-                Attention : supprimer ce pilote retirera son accès à la plateforme définitivement.
-            </div>
+            <form method="POST" action="{{ base_url }}admin/pilotes" style="margin-top: 1.5rem;">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="action" value="supprimer_ok">
+                <input type="hidden" name="id" value="{{ pilot.id }}">
 
-            <form
-                method="POST"
-                action="<?= BASE_URL ?>admin/pilotes?action=supprimer_ok&id=<?= (int)$pilote['id'] ?>"
-                style="margin-top:1.5rem;"
-            >
                 <div class="admin-form-actions">
-                    <button type="submit" class="admin-btn admin-btn-danger">
-                        <i class="bi bi-trash-fill"></i>
-                        Oui, supprimer définitivement
-                    </button>
-                    <a href="<?= BASE_URL ?>admin/pilotes?action=voir&id=<?= (int)$pilote['id'] ?>" class="admin-btn admin-btn-secondary">
+                    <a href="{{ base_url }}admin/pilotes?action=voir&id={{ pilot.id }}" class="admin-btn admin-btn-secondary">
                         Annuler
                     </a>
+                    <button type="submit" class="admin-btn admin-btn-danger">
+                        <i class="bi bi-trash-fill"></i>
+                        Confirmer la suppression
+                    </button>
                 </div>
             </form>
-
         </section>
-
-    <?php endif; ?>
-
+    {% endif %}
 </section>
-
-<?php require BASE_PATH . '/app/views/layout/footer.php'; ?>
+{% endblock %}

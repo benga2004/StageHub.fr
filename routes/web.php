@@ -59,6 +59,9 @@ switch ($url) {
     case 'admin/entreprises':
         (new AdminController())->entreprises();
         break;
+    case 'admin/pilotes':
+        (new AdminController())->pilotes();
+        break;
     case 'admin/etudiants':
         (new AdminController())->etudiants();
         break;
@@ -75,10 +78,10 @@ switch ($url) {
         if (isset($_SESSION['user_role']) && ($_SESSION['user_role'] == 'pilote' || $_SESSION['user_role'] == 'admin')) {
                 (new OfferController())->add();
         } else {
-            // Ajout d’un message de type flash pour affichage via CSS côté page
+            // Ajout dÃ¢â‚¬â„¢un message de type flash pour affichage via CSS cÃƒÂ´tÃƒÂ© page
             $_SESSION['flash'] = [
                 'type' => 'error',
-                'message' => 'Accès refusé : vous devez être connecté en tant que pilote ou admin pour ajouter une offre.'
+                'message' => 'AccÃƒÂ¨s refusÃƒÂ© : vous devez ÃƒÂªtre connectÃƒÂ© en tant que pilote ou admin pour ajouter une offre.'
             ];
             header('Location: ' . BASE_URL . 'connexion');
             exit;
@@ -129,7 +132,7 @@ switch ($url) {
             if (!$post_nom) $erreurs[] = 'Votre nom est obligatoire.';
             if (!filter_var($post_email, FILTER_VALIDATE_EMAIL)) $erreurs[] = 'Adresse email invalide.';
             if (!$post_sujet) $erreurs[] = 'Veuillez choisir un sujet.';
-            if (strlen($post_message) < 20) $erreurs[] = 'Votre message doit faire au moins 20 caractères.';
+            if (strlen($post_message) < 20) $erreurs[] = 'Votre message doit faire au moins 20 caractÃƒÂ¨res.';
             if (empty($erreurs)) $succes = true;
         }
         echo twig_render('contact.html.twig', compact('succes', 'erreurs', 'post_nom', 'post_email', 'post_sujet', 'post_message'));

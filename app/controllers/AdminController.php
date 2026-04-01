@@ -29,6 +29,19 @@ class AdminController {
         return $flash;
     }
 
+    private function setPilotFlash(string $type, string $message): void {
+        $_SESSION['admin_pilotes_flash'] = [
+            'type' => $type,
+            'message' => $message,
+        ];
+    }
+
+    private function consumePilotFlash(): ?array {
+        $flash = $_SESSION['admin_pilotes_flash'] ?? null;
+        unset($_SESSION['admin_pilotes_flash']);
+        return $flash;
+    }
+
     private function redirectToRoute(string $route, array $query = []): void {
         $url = BASE_URL . ltrim($route, '/');
         if (!empty($query)) {
@@ -85,6 +98,59 @@ class AdminController {
         return $errors;
     }
 
+    private function getPilotFormDataFromPost(): array {
+        return [
+            'nom' => trim($_POST['nom'] ?? ''),
+            'prenom' => trim($_POST['prenom'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+            'password' => trim($_POST['password'] ?? ''),
+        ];
+    }
+
+    private function validatePilotFormData(array $data, User $userModel, ?int $pilotId = null, bool $requirePassword = false): array {
+        $errors = [];
+
+        if ($data['prenom'] === '') {
+            $errors[] = 'Le prenom est obligatoire.';
+        }
+
+        if ($data['nom'] === '') {
+            $errors[] = 'Le nom est obligatoire.';
+        }
+
+        if ($data['email'] === '') {
+            $errors[] = 'L email est obligatoire.';
+        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'L email n est pas valide.';
+        }
+
+        if ($requirePassword && $data['password'] === '') {
+            $errors[] = 'Le mot de passe est obligatoire.';
+        }
+
+        if ($data['password'] !== '' && strlen($data['password']) < 8) {
+            $errors[] = 'Le mot de passe doit contenir au moins 8 caracteres.';
+        }
+
+        if ($data['email'] !== '') {
+            $existingUser = $userModel->findByEmail($data['email']);
+            if (!empty($existingUser) && (int) $existingUser['id'] !== (int) $pilotId) {
+                $errors[] = 'Cette adresse email est deja utilisee.';
+            }
+        }
+
+        return $errors;
+    }
+
+    private function getPilotById(User $userModel, int $pilotId): array {
+        $pilot = $pilotId > 0 ? $userModel->findById($pilotId) : [];
+        if (empty($pilot) || ($pilot['role'] ?? '') !== 'pilote') {
+            return [];
+        }
+
+        return $pilot;
+    }
+
     public function index(): void {
         $this->guard();
 
@@ -133,12 +199,12 @@ class AdminController {
             ],
             [
                 'title' => 'Comptes pilotes',
-                'description' => 'Vue d ensemble des responsables de promotion.',
+                'description' => 'Gerer les comptes pilotes et consulter leurs acces.',
                 'count' => $nbPilotes,
-                'href' => null,
-                'status' => 'Bientot',
+                'href' => BASE_URL . 'admin/pilotes',
+                'status' => 'Disponible',
                 'icon' => 'bi bi-person-badge-fill',
-                'is_active' => false,
+                'is_active' => true,
             ],
             [
                 'title' => 'Comptes etudiants',
@@ -308,6 +374,136 @@ class AdminController {
         ]);
     }
 
+    public function pilotes(): void {
+        $this->guard();
+
+        $userModel = new User();
+        $allowedActions = ['liste', 'voir', 'creer', 'modifier', 'supprimer', 'supprimer_ok'];
+        $action = (string) ($_POST['action'] ?? $_GET['action'] ?? 'liste');
+        if (!in_array($action, $allowedActions, true)) {
+            $action = 'liste';
+        }
+
+        $search = trim((string) ($_GET['q'] ?? ''));
+        $pilotId = (int) ($_POST['id'] ?? $_GET['id'] ?? 0);
+        $pilotFlash = $this->consumePilotFlash();
+        $formErrors = [];
+        $pilotForm = [
+            'nom' => '',
+            'prenom' => '',
+            'email' => '',
+            'password' => '',
+        ];
+        $pilot = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!$this->isValidCsrf()) {
+                $formErrors[] = 'Le token de securite est invalide. Recharge la page et recommence.';
+                if ($action === 'supprimer_ok') {
+                    $action = 'supprimer';
+                }
+            } elseif ($action === 'creer') {
+                $pilotForm = $this->getPilotFormDataFromPost();
+                $formErrors = $this->validatePilotFormData($pilotForm, $userModel, null, true);
+
+                if (empty($formErrors)) {
+                    $created = $userModel->create([
+                        'nom' => $pilotForm['nom'],
+                        'prenom' => $pilotForm['prenom'],
+                        'email' => $pilotForm['email'],
+                        'password' => $pilotForm['password'],
+                        'role' => 'pilote',
+                    ]);
+
+                    if ($created) {
+                        $newPilot = $userModel->findByEmail($pilotForm['email']);
+                        $this->setPilotFlash('success', 'Pilote cree avec succes.');
+                        $this->redirectToRoute('admin/pilotes', ['action' => 'voir', 'id' => (int) ($newPilot['id'] ?? 0)]);
+                    }
+
+                    $formErrors[] = 'Impossible de creer ce pilote.';
+                }
+            } elseif ($action === 'modifier') {
+                $pilot = $this->getPilotById($userModel, $pilotId);
+                $pilotForm = $this->getPilotFormDataFromPost();
+
+                if (empty($pilot)) {
+                    $formErrors[] = 'Pilote introuvable.';
+                } else {
+                    $formErrors = $this->validatePilotFormData($pilotForm, $userModel, $pilotId, false);
+                }
+
+                if (empty($formErrors)) {
+                    $data = [
+                        'nom' => $pilotForm['nom'],
+                        'prenom' => $pilotForm['prenom'],
+                        'email' => $pilotForm['email'],
+                    ];
+
+                    if ($pilotForm['password'] !== '') {
+                        $data['password'] = $pilotForm['password'];
+                    }
+
+                    if ($userModel->update($pilotId, $data)) {
+                        $this->setPilotFlash('success', 'Pilote mis a jour avec succes.');
+                        $this->redirectToRoute('admin/pilotes', ['action' => 'voir', 'id' => $pilotId]);
+                    }
+
+                    $formErrors[] = 'Impossible de mettre a jour ce pilote.';
+                }
+            } elseif ($action === 'supprimer_ok') {
+                $pilot = $this->getPilotById($userModel, $pilotId);
+
+                if (empty($pilot)) {
+                    $this->setPilotFlash('error', 'Pilote introuvable.');
+                    $this->redirectToRoute('admin/pilotes');
+                }
+
+                if ($userModel->delete($pilotId)) {
+                    $this->setPilotFlash('success', 'Pilote supprime avec succes.');
+                } else {
+                    $this->setPilotFlash('error', 'Impossible de supprimer ce pilote.');
+                }
+
+                $this->redirectToRoute('admin/pilotes');
+            }
+        }
+
+        if (in_array($action, ['voir', 'modifier', 'supprimer'], true)) {
+            $pilot = $this->getPilotById($userModel, $pilotId);
+            if (empty($pilot)) {
+                $this->setPilotFlash('error', 'Pilote introuvable.');
+                $this->redirectToRoute('admin/pilotes');
+            }
+
+            if ($action === 'modifier' && empty($formErrors)) {
+                $pilotForm = [
+                    'nom' => $pilot['nom'] ?? '',
+                    'prenom' => $pilot['prenom'] ?? '',
+                    'email' => $pilot['email'] ?? '',
+                    'password' => '',
+                ];
+            }
+        }
+
+        $pilotes = [];
+        if ($action === 'liste') {
+            $pilotes = $search !== ''
+                ? $userModel->searchByRole('pilote', $search)
+                : $userModel->getByRole('pilote');
+        }
+
+        echo twig_render('admin/pilote.html.twig', [
+            'action' => $action,
+            'pilot' => $pilot,
+            'pilotes' => $pilotes,
+            'search' => $search,
+            'pilotFlash' => $pilotFlash,
+            'formErrors' => $formErrors,
+            'pilotForm' => $pilotForm,
+        ]);
+    }
+
     public function etudiants(): void {
         $this->guardAdminOrPilote();
 
@@ -354,9 +550,9 @@ class AdminController {
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Adresse email invalide.'];
         } elseif (strlen($password) < 8) {
-            $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Le mot de passe doit faire au moins 8 caractères.'];
+            $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Le mot de passe doit faire au moins 8 caracteres.'];
         } elseif ((new User())->emailExists($email)) {
-            $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Cette adresse email est déjà utilisée.'];
+            $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Cette adresse email est deja utilisee.'];
         } else {
             (new User())->create([
                 'nom'      => $nom,
@@ -365,7 +561,7 @@ class AdminController {
                 'password' => $password,
                 'role'     => 'etudiant',
             ]);
-            $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Étudiant créé avec succès.'];
+            $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Etudiant cree avec succes.'];
         }
 
         header('Location: ' . BASE_URL . 'admin/etudiants');
@@ -380,16 +576,16 @@ class AdminController {
             exit;
         }
 
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? 0);
         if ($id <= 0) {
             $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Identifiant invalide.'];
         } else {
             $user = (new User())->findById($id);
             if (empty($user) || $user['role'] !== 'etudiant') {
-                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Étudiant introuvable.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Etudiant introuvable.'];
             } else {
                 (new User())->delete($id);
-                $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Étudiant supprimé avec succès.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Etudiant supprime avec succes.'];
             }
         }
 
@@ -405,7 +601,7 @@ class AdminController {
             exit;
         }
 
-        $id       = (int)($_POST['id'] ?? 0);
+        $id       = (int) ($_POST['id'] ?? 0);
         $nom      = trim($_POST['nom'] ?? '');
         $prenom   = trim($_POST['prenom'] ?? '');
         $email    = trim($_POST['email'] ?? '');
@@ -416,20 +612,22 @@ class AdminController {
         } else {
             $user = (new User())->findById($id);
             if (empty($user) || $user['role'] !== 'etudiant') {
-                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Étudiant introuvable.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Etudiant introuvable.'];
             } elseif (!$nom || !$prenom || !$email) {
-                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Nom, prénom et email sont obligatoires.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Nom, prenom et email sont obligatoires.'];
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Adresse email invalide.'];
             } elseif ($email !== $user['email'] && (new User())->emailExists($email)) {
-                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Cette adresse email est déjà utilisée.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Cette adresse email est deja utilisee.'];
             } elseif ($password && strlen($password) < 8) {
-                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Le mot de passe doit faire au moins 8 caractères.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'error', 'message' => 'Le mot de passe doit faire au moins 8 caracteres.'];
             } else {
                 $data = ['nom' => $nom, 'prenom' => $prenom, 'email' => $email];
-                if ($password) $data['password'] = $password;
+                if ($password) {
+                    $data['password'] = $password;
+                }
                 (new User())->update($id, $data);
-                $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Étudiant modifié avec succès.'];
+                $_SESSION['flash_etudiants'] = ['type' => 'success', 'message' => 'Etudiant modifie avec succes.'];
             }
         }
 

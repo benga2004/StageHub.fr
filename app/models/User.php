@@ -39,7 +39,7 @@ class User {
     }
 
     public function getAll(): array {
-        return $this->db->query('SELECT id, nom, prenom, email, role FROM users')->fetchAll(PDO::FETCH_ASSOC);
+        return $this->db->query('SELECT id, nom, prenom, email, role, created_at FROM users')->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function delete(int $id): bool {
@@ -66,14 +66,14 @@ class User {
     }
 
     public function getByRole(string $role): array {
-        $stmt = $this->db->prepare('SELECT id, nom, prenom, email, role FROM users WHERE role = :role ORDER BY nom, prenom');
+        $stmt = $this->db->prepare('SELECT id, nom, prenom, email, role, created_at FROM users WHERE role = :role ORDER BY nom, prenom');
         $stmt->execute([':role' => $role]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function searchByRole(string $role, string $search): array {
         $stmt = $this->db->prepare('
-            SELECT id, nom, prenom, email, role FROM users
+            SELECT id, nom, prenom, email, role, created_at FROM users
             WHERE role = :role
               AND (nom LIKE :s OR prenom LIKE :s OR email LIKE :s)
             ORDER BY nom, prenom
