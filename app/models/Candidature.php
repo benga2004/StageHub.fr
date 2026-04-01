@@ -7,6 +7,10 @@ class Candidature {
         $this->db = Database::connect();
     }
 
+    public function count(): int {
+        return (int) $this->db->query('SELECT COUNT(*) FROM candidatures')->fetchColumn();
+    }
+
     public static function postuler(int $offreId, int $etudiantId, string $cvPath, string $lettre): bool {
         $db   = Database::connect();
         $stmt = $db->prepare(

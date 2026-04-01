@@ -6,6 +6,10 @@ class Company {
         $this->db = Database::connect();
     }
 
+    public function count(): int {
+        return (int) $this->db->query('SELECT COUNT(*) FROM entreprises')->fetchColumn();
+    }
+
     public function getAll(): array {
         return $this->db->query('SELECT * FROM entreprises ORDER BY nom ASC')->fetchAll(PDO::FETCH_ASSOC);
     }

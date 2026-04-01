@@ -29,9 +29,6 @@
                 <i class="fas fa-bookmark"></i> Wishlist
                 <span class="dash-badge">{{ nbWishlist }}</span>
             </a>
-            <a href="#modifier"    class="dash-nav-link" data-tab="modifier">
-                <i class="fas fa-pen"></i> Modifier le profil
-            </a>
         </nav>
 
         <a class="dash-logout" href="{{ base_url }}deconnexion">
@@ -174,102 +171,11 @@
             </div>
         </div>
 
-        <!-- Tab: Modifier le profil -->
-        <div class="dash-tab" id="tab-modifier">
-            <div class="dash-card">
-                <h2 class="dash-card-title"><i class="fas fa-pen"></i> Modifier mon profil</h2>
-
-                {% if succes_profil %}
-                <div class="dash-alert dash-alert--success">
-                    <i class="fas fa-check-circle"></i> {{ succes_profil }}
-                </div>
-                {% endif %}
-
-                {% if erreur_profil %}
-                <div class="dash-alert dash-alert--error">
-                    <i class="fas fa-exclamation-triangle"></i> {{ erreur_profil }}
-                </div>
-                {% endif %}
-
-                <form method="POST" action="" enctype="multipart/form-data" class="dash-edit-form">
-                    <input type="hidden" name="action" value="update_profil">
-
-                    <div class="dash-form-row">
-                        <div class="form-group">
-                            <label for="edit-prenom">Prénom</label>
-                            <input type="text" id="edit-prenom" name="prenom"
-                                value="{{ post_prenom|default(user.prenom|default('')) }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-nom">Nom</label>
-                            <input type="text" id="edit-nom" name="nom"
-                                value="{{ post_nom|default(user.nom|default('')) }}" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-email">Adresse email</label>
-                        <input type="email" id="edit-email" name="email"
-                            value="{{ post_email|default(user.email|default('')) }}" required>
-                    </div>
-
-                    <hr class="dash-divider">
-                    <p class="dash-hint"><i class="fas fa-file-pdf"></i> Mon CV (PDF — 3 Mo max)</p>
-
-                    {% if user.cv_path %}
-                    <div class="dash-cv-current">
-                        <i class="fas fa-check-circle" style="color:#68d391"></i>
-                        <span>CV enregistré</span>
-                        <a href="{{ base_url ~ user.cv_path }}"
-                           target="_blank" class="dash-cv-link">
-                            <i class="fas fa-eye"></i> Voir
-                        </a>
-                    </div>
-                    {% endif %}
-
-                    <div class="form-group">
-                        <label for="cv_profile">{{ user.cv_path ? 'Remplacer mon CV' : 'Ajouter mon CV' }}</label>
-                        <div class="cand-file-drop">
-                            <i class="fas fa-cloud-upload-alt cand-file-icon" aria-hidden="true"></i>
-                            <span class="cand-file-label">Glissez votre PDF ici ou <span class="cand-file-browse">parcourez</span></span>
-                            <input type="file" id="cv_profile" name="cv_profile" accept=".pdf">
-                        </div>
-                    </div>
-
-                    <hr class="dash-divider">
-                    <p class="dash-hint"><i class="fas fa-lock"></i> Laissez vide pour conserver votre mot de passe actuel</p>
-                    <div class="dash-form-row">
-                        <div class="form-group">
-                            <label for="edit-password">Nouveau mot de passe</label>
-                            <input type="password" id="edit-password" name="password" placeholder="8 caractères min">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-password-confirm">Confirmer</label>
-                            <input type="password" id="edit-password-confirm" name="password_confirm">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Enregistrer les modifications
-                    </button>
-                </form>
-            </div>
-        </div>
-
     </main>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Ouvrir directement l'onglet modifier si le controller a signalé succes/erreur
-{% if succes_profil or erreur_profil %}
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('[data-tab="modifier"]')?.click();
-});
-{% endif %}
-</script>
-
 <script>
 // Onglets dashboard profil
 document.querySelectorAll('.dash-nav-link').forEach(function(link) {

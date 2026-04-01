@@ -25,15 +25,24 @@ class OfferController {
         }
         unset($offre);
 
+        $totalCompanies    = $companyModel->count();
+        $totalCandidatures = (new Candidature())->count();
+        $statsDomaine      = $model->countByDomaine();
+        $statsVille        = $model->countByVille();
+
         echo twig_render('Accueil.html.twig', [
-            'offresPage'  => $offresPage,
-            'total'       => $total,
-            'pages'       => $pages,
-            'page'        => $page,
-            'query'       => $query,
-            'ville'       => $ville,
-            'domaine'     => $domaine,
-            'wishlistIds' => $wishlistIds,
+            'offresPage'        => $offresPage,
+            'total'             => $total,
+            'pages'             => $pages,
+            'page'              => $page,
+            'query'             => $query,
+            'ville'             => $ville,
+            'domaine'           => $domaine,
+            'wishlistIds'       => $wishlistIds,
+            'totalCompanies'    => $totalCompanies,
+            'totalCandidatures' => $totalCandidatures,
+            'statsDomaine'      => $statsDomaine,
+            'statsVille'        => $statsVille,
         ]);
     }
 

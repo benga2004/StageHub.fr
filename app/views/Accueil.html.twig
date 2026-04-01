@@ -12,9 +12,6 @@
     </p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="{{ base_url }}offres">Voir les offres</a>
-      {% if not session.user_id %}
-      <a class="btn btn-secondary" href="{{ base_url }}inscription">Créer un compte</a>
-      {% endif %}
     </div>
   </div>
 </section>
@@ -44,15 +41,15 @@
   <h2>Nos chiffres clés</h2>
   <div class="stats-grid">
     <div class="stat-item">
-      <p class="stat-value">{{ total|default('---') }}</p>
+      <p class="stat-value">{{ total|default(0) }}</p>
       <p class="stat-label">Offres disponibles</p>
     </div>
     <div class="stat-item">
-      <p class="stat-value">+200</p>
-      <p class="stat-label">Entreprises actives</p>
+      <p class="stat-value">{{ totalCompanies|default(0) }}</p>
+      <p class="stat-label">Entreprises partenaires</p>
     </div>
     <div class="stat-item">
-      <p class="stat-value">+1000</p>
+      <p class="stat-value">{{ totalCandidatures|default(0) }}</p>
       <p class="stat-label">Candidatures envoyées</p>
     </div>
   </div>
@@ -62,12 +59,11 @@
   {% if session.user_id %}
     <h2>Bonne recherche, {{ session.user_prenom|default('') }} !</h2>
     <p>Explorez les offres disponibles et postulez directement depuis votre espace.</p>
-    <a class="btn btn-primary" href="{{ base_url }}offres">Voir les offres</a>
   {% else %}
     <h2>Prêt à lancer votre carrière ?</h2>
-    <p>Inscrivez-vous, complétez votre profil et trouvez le stage qui vous fera grandir.</p>
-    <a class="btn btn-primary" href="{{ base_url }}inscription">Inscription étudiant</a>
+    <p>Connectez-vous et trouvez le stage qui vous fera grandir.</p>
   {% endif %}
+  <a class="btn btn-primary" href="{{ base_url }}offres">Voir les offres</a>
 </section>
 
 {% include 'offers/_list.html.twig' %}

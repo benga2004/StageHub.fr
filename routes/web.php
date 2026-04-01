@@ -39,8 +39,8 @@ switch ($url) {
         (new AuthController())->logout();
         break;
     case 'inscription':
-        (new AuthController())->register();
-        break;
+        header('Location: ' . BASE_URL . 'connexion');
+        exit;
     case 'candidature':
         (new CandidatureController())->index();
         break;

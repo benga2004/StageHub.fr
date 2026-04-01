@@ -99,4 +99,14 @@ class Offer {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function countByDomaine(): array {
+        $stmt = $this->db->query('SELECT domaine, COUNT(*) AS total FROM offres GROUP BY domaine ORDER BY total DESC');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countByVille(): array {
+        $stmt = $this->db->query('SELECT ville, COUNT(*) AS total FROM offres GROUP BY ville ORDER BY total DESC LIMIT 6');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
